@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>resources/clear_icon.ico</file>
+        <file>resources/open_file_icon.ico</file>
+        <file>resources/save_file_icon.ico</file>
+        <file>resources/play_icon.ico</file>
+        <file>resources/check_all_icon.ico</file>
+        <file>resources/app_icon.ico</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,50 @@
+#include "common/j_msg_property.h"
+
+const QString enum_to_string(j_property_id id)
+{
+    switch (id)
+    {
+    case j_property_id::WORDS_IN_MESSAGE:
+        return QString("Words in Message");
+    case j_property_id::SYMBOLS_IN_WORD:
+        return QString("Symbols in Word");
+    default:
+        return QString();
+    }
+}
+
+double j_simple_property::correlation(j_abstract_property *another)
+{
+    if (another && another->is_simple() && can_be_merged(this, another))
+    {
+        j_simple_property* s_prop = static_cast<j_simple_property*>(another);
+        if (is_empty() || s_prop->is_empty())
+            return -1;
+        else
+            return 1 - ( 2 * abs(value - s_prop->value) / (value + s_prop->value));
+    }
+    else
+        return 0.;
+}
+
+bool j_simple_property::join(j_abstract_property *another)
+{
+    if (another && another->is_simple() && can_be_merged(this, another) && !another->is_empty())
+    {
+        j_simple_property* s_prop = static_cast<j_simple_property*>(another);
+        if (is_empty())
+        {
+            set_data(s_prop->value);
+            set_weight(s_prop->weight());
+        }
+        else
+        {
+            uint32_t sum_weight = weight() + s_prop->weight();
+            set_data( (value * weight() + s_prop->value * s_prop->weight()) / sum_weight);
+            set_weight(sum_weight);
+        }
+        return true;
+    }
+    else
+        return false;
+}
