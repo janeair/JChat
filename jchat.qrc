@@ -1,10 +1,15 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>resources/clear_icon.ico</file>
-        <file>resources/open_file_icon.ico</file>
-        <file>resources/save_file_icon.ico</file>
-        <file>resources/play_icon.ico</file>
-        <file>resources/check_all_icon.ico</file>
         <file>resources/app_icon.ico</file>
+        <file>resources/add_profile_icon.png</file>
+        <file>resources/delete_icon.png</file>
+        <file>resources/edit_profile_icon.png</file>
+        <file>resources/export_icon.png</file>
+        <file>resources/import_icon.png</file>
+        <file>resources/open_icon.png</file>
+        <file>resources/profile_icon.png</file>
+        <file>resources/save_icon.png</file>
+        <file>resources/select_icon.png</file>
+        <file>resources/settings_icon.png</file>
     </qresource>
 </RCC>

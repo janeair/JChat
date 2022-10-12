@@ -1,27 +1,35 @@
 #include "j_profile_dialog.h"
 
 #include <QCloseEvent>
-#include <QHBoxLayout>
-#include <QPushButton>
+#include <QMainWindow>
+#include <QGridLayout>
+#include <QLabel>
+#include "gui/display/j_action_toolbar.h"
 
 j_profile_dialog::j_profile_dialog(QWidget* parent) : QDialog(parent)
 {
     cb = new QComboBox(this);
     connect(cb, &QComboBox::activated, this, &j_profile_dialog::configure_editable);
+    cb->setFixedHeight(30);
+    cb->setFixedWidth(120);
     cb->setEditable(false);
     cb->setDuplicatesEnabled(false);
 
-    QPushButton* select = new QPushButton(QIcon(":/icons/resources/check_all_icon.ico"), "", this);
-    connect(select, &QPushButton::pressed, this, &j_profile_dialog::select_profile);
-    select->setToolTip("Select");
+    tb = new j_action_toolbar("", this);
+    tb->setMovable(false);
+    tb->setFloatable(false);
+    tb->setOrientation(Qt::Vertical);
+    connect(tb, &j_action_toolbar::to_select, this, &j_profile_dialog::select_profile);
 
-    QHBoxLayout* layout = new QHBoxLayout();
-    layout->addWidget(select, 0);
-    layout->addWidget(cb, 1);
+    QLabel* profiles_cc = new QLabel("Profiles: 0");
+    QGridLayout* layout = new QGridLayout();
+    layout->setSpacing(10);
+    layout->addWidget(tb, 0, 0, 2, 1, Qt::AlignTop);
+    layout->addWidget(cb, 0, 1, 1, 1, Qt::AlignCenter);
+    layout->addWidget(profiles_cc, 1, 1, 1, 1, Qt::AlignRight);
+    layout->setContentsMargins(5, 10, 10, 10);
 
     setLayout(layout);
-    setMinimumSize(QSize(150, 50));
-    setFixedHeight(50);
     setWindowTitle("Select Profile");
 }
 
@@ -31,11 +39,13 @@ void j_profile_dialog::exec_profiles(QStringList names, j_profile_dialog_action 
         return;
     if (!isVisible())
     {
+        tb->add_action(j_toolbar_action_t::A_SELECT, "Select");
         foreach (auto name, names)
             cb->addItem(name);
         if (action == j_profile_dialog_action::SaveNewProfile)
             cb->addItem("new profile");
         current_action = action;
+        setFixedSize(baseSize());
         exec();
     }
 }
@@ -44,6 +54,7 @@ void j_profile_dialog::closeEvent(QCloseEvent* event)
 {
     cb->clear();
     cb->setEditable(false);
+    tb->clear_actions();
     current_action = j_profile_dialog_action::None;
     event->accept();
 }

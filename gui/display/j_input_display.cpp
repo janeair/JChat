@@ -12,11 +12,11 @@ j_input_display::j_input_display(QWidget* parent)
           )
 {
     /// configure toolbar
-    toolbar()->add_action(j_toolbar_action_t::A_CHECKALL, "Select all settings");
-    toolbar()->add_action(j_toolbar_action_t::A_PLAY, "Process text");
-    toolbar()->add_action(j_toolbar_action_t::A_CLEAR, "Clear field");
+    toolbar()->add_action(j_toolbar_action_t::A_SELECT, "Process text");
+    toolbar()->add_action(j_toolbar_action_t::A_SETTINGS, "Show/hide settings");
+    toolbar()->add_action(j_toolbar_action_t::A_DELETE, "Clear field");
 
-    connect(toolbar(), &j_action_toolbar::to_play, this, &j_input_display::process_input);
+    connect(toolbar(), &j_action_toolbar::to_select, this, &j_input_display::process_input);
     field()->setAlignment(Qt::AlignLeft);
 }
 

@@ -4,13 +4,14 @@
 #include <QDialog>
 #include <QComboBox>
 
-
+class j_action_toolbar;
 
 enum class j_profile_dialog_action
 {
     None,
     GetProfileData,
     SaveNewProfile,
+    EditProfiles,
 };
 
 class j_profile_dialog : public QDialog
@@ -30,6 +31,7 @@ signals:
 
 private:
     j_profile_dialog_action current_action =  j_profile_dialog_action::None;
+    j_action_toolbar* tb = nullptr;
     QComboBox* cb = nullptr;
 
 private slots:

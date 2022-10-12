@@ -16,8 +16,15 @@ j_abstract_display::j_abstract_display(QString title, j_settings st, QWidget *pa
     QDockWidget* field = new QDockWidget("Field");
     field->setWidget(fld);
 
-    connect(tb, &j_action_toolbar::to_clear, fld, &QTextEdit::clear);
-    connect(tb, &j_action_toolbar::to_check_all, stngs, &j_settings_widget::check_all);
+    connect(tb, &j_action_toolbar::to_delete, fld, &QTextEdit::clear);
+    connect(tb, &j_action_toolbar::to_settings,
+            [this] ()
+    {
+        if (stngs->isHidden())
+            stngs->show();
+        else
+            stngs->hide();
+    });
 
     QMainWindow* w = new QMainWindow();
     w->addToolBar(tb);

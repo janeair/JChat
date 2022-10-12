@@ -2,6 +2,7 @@
 
 #include "gui/display/j_action_toolbar.h"
 #include "gui/jchat_log.h"
+#include "common/j_settings.h"
 #include "common/j_msg_property.h"
 
 #include <QTextEdit>
@@ -15,16 +16,16 @@ j_output_display::j_output_display(QWidget* parent)
           )
 {
     /// configure toolbar
-    toolbar()->add_action(j_toolbar_action_t::A_CHECKALL, "Select all settings");
-    toolbar()->add_action(j_toolbar_action_t::A_CLEAR, "Clear field");
     toolbar()->add_action(j_toolbar_action_t::A_SAVE, "Save to profile");
     toolbar()->add_action(j_toolbar_action_t::A_OPEN, "Open from profile");
+    toolbar()->add_action(j_toolbar_action_t::A_SETTINGS, "Show/hide settings");
+    toolbar()->add_action(j_toolbar_action_t::A_DELETE, "Clear field");
 
     dlg = new j_profile_dialog(this);
     connect(dlg, &j_profile_dialog::selected_profile, this, &j_output_display::on_selected_profile);
     connect(toolbar(), &j_action_toolbar::to_save, this, &j_output_display::save_to_profile_dialog);
     connect(toolbar(), &j_action_toolbar::to_open, this, &j_output_display::open_profile_dialog);
-    connect(toolbar(), &j_action_toolbar::to_clear, [this] { current_stats.clear(); });
+    connect(toolbar(), &j_action_toolbar::to_delete, [this] { current_stats.clear(); });
 
     field()->setReadOnly(true);
     field()->setAlignment(Qt::AlignLeft);

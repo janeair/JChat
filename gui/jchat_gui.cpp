@@ -20,8 +20,8 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
     toolbar = new j_action_toolbar("Actions", this);
     log = new j_log_widget(this);
 
-    toolbar->add_action(j_toolbar_action_t::A_CLEAR, "Clear history");
-    connect(toolbar, &j_action_toolbar::to_clear, log, &j_log_widget::clear);
+    toolbar->add_action(j_toolbar_action_t::A_DELETE, "Clear history");
+    connect(toolbar, &j_action_toolbar::to_delete, log, &j_log_widget::clear);
 
     connect(input, &j_input_display::to_configure, this, &jchat_gui::configure);
     connect(output, &j_output_display::log_this, log, &j_log_widget::log_message);

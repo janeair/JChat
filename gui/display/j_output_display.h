@@ -4,7 +4,6 @@
 #include "common/j_ling.h"
 #include "common/j_msgs_general_stats.h"
 #include "common/j_msgs_property_stats.h"
-#include "common/j_settings.h"
 #include "gui/display/j_abstract_display.h"
 #include "gui/display/output/j_profile_dialog.h"
 
