@@ -14,6 +14,7 @@ j_input_display::j_input_display(QWidget* parent)
     /// configure toolbar
     toolbar()->add_action(j_toolbar_action_t::A_SELECT, "Process text");
     toolbar()->add_action(j_toolbar_action_t::A_SETTINGS, "Show/hide settings");
+    toolbar()->add_action(j_toolbar_action_t::A_EXPORT, "Export input");
     toolbar()->add_action(j_toolbar_action_t::A_DELETE, "Clear field");
 
     connect(toolbar(), &j_action_toolbar::to_select, this, &j_input_display::process_input);

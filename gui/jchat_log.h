@@ -24,6 +24,7 @@ class j_log_widget : public QDockWidget
 
 public:
     j_log_widget(QWidget* parent = nullptr);
+    QTextEdit* log_widget() const { return text_log; }
 
 public slots:
     void log_message(j_log_action_t t, QString decr = "");

@@ -10,7 +10,6 @@
 
 #include "gui/display/j_action_toolbar.h"
 #include "gui/jchat_log.h"
-#include "common/j_msg_property.h"
 #include "common/j_settings.h"
 
 jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
@@ -20,8 +19,17 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
     toolbar = new j_action_toolbar("Actions", this);
     log = new j_log_widget(this);
 
-    toolbar->add_action(j_toolbar_action_t::A_DELETE, "Clear history");
+    toolbar->add_action(j_toolbar_action_t::A_EDIT_PROFILE, "Edit Profiles");
+    toolbar->add_action(j_toolbar_action_t::A_EXPORT, "Export history", false);
+    toolbar->add_action(j_toolbar_action_t::A_DELETE, "Clear history", false);
     connect(toolbar, &j_action_toolbar::to_delete, log, &j_log_widget::clear);
+    connect(log->log_widget(), &QTextEdit::textChanged,
+            [this] ()
+    {
+        bool value = (log->log_widget()->toPlainText().length() > 0);
+        toolbar->set_enabled(j_toolbar_action_t::A_DELETE, value);
+        toolbar->set_enabled(j_toolbar_action_t::A_EXPORT, value);
+    });
 
     connect(input, &j_input_display::to_configure, this, &jchat_gui::configure);
     connect(output, &j_output_display::log_this, log, &j_log_widget::log_message);
@@ -33,8 +41,7 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
     central_scene->addDockWidget(Qt::RightDockWidgetArea, output);
     setCentralWidget(central_scene);
     addDockWidget(Qt::BottomDockWidgetArea, log);
-    toolbar->hide();
-    addToolBar(Qt::TopToolBarArea, toolbar);
+    addToolBar(Qt::LeftToolBarArea, toolbar);
 }
 
 void jchat_gui::configure(uint32_t msgs, j_settings st)

@@ -2,16 +2,27 @@
 
 j_action_toolbar::j_action_toolbar(QString title, QWidget* parent) : QToolBar(title, parent)
 {
-    action = new QList<QAction*>();
+    action = new QList<ACTION>();
 }
 
-void j_action_toolbar::add_action(j_toolbar_action_t t, QString tooltip)
+void j_action_toolbar::add_action(j_toolbar_action_t t, QString tooltip, bool default_enabled)
 {
     QIcon action_icon = QIcon(enum_to_icon_path(t));
     QAction* new_action = new QAction(action_icon, tooltip, this);
+    new_action->setEnabled(default_enabled);
     connect_to(t, new_action);
-    action->append(new_action);
+    action->append(ACTION(t, new_action));
     addAction(new_action);
+}
+
+void j_action_toolbar::set_enabled(j_toolbar_action_t t, bool value)
+{
+    foreach (ACTION a, actions())
+        if (a.first == t)
+        {
+            a.second->setEnabled(value);
+            return;
+        }
 }
 
 void j_action_toolbar::connect_to(j_toolbar_action_t t, QAction *a)

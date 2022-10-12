@@ -21,11 +21,7 @@ jchat::jchat() : QObject()
     connect(comparator.get(), &j_comparator::results_to_gui, gui.get()->get_output(), &j_output_display::display_compare_results);
 
     /// connect profile loader with gui
-    connect(loader.get(), &j_profile_loader::profiles_to_gui, gui.get()->get_output(), &j_output_display::on_change_profiles);
-    connect(gui.get()->get_output(), &j_output_display::new_profile, loader.get(), &j_profile_loader::add);
-
     connect(loader.get(), &j_profile_loader::profile_data_to_gui, gui.get()->get_output(), &j_output_display::display_profile);
-    connect(gui.get()->get_output(), &j_output_display::get_profile_data, loader.get(), &j_profile_loader::get_profile_from_gui);
 
     /// configure proc with gui settings
     connect(gui.get(), &jchat_gui::to_configure_ling, linguist.get(), &j_linguist::configure_settings);

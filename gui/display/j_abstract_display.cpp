@@ -25,6 +25,14 @@ j_abstract_display::j_abstract_display(QString title, j_settings st, QWidget *pa
         else
             stngs->hide();
     });
+    connect(fld, &QTextEdit::textChanged,
+            [this] ()
+    {
+        bool val = (fld->toPlainText().length() > 0);
+        tb->set_enabled(j_toolbar_action_t::A_DELETE, val);
+        tb->set_enabled(j_toolbar_action_t::A_EXPORT, val);
+        tb->set_enabled(j_toolbar_action_t::A_SELECT, val);
+    });
 
     QMainWindow* w = new QMainWindow();
     w->addToolBar(tb);

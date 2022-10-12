@@ -23,6 +23,8 @@ enum class j_toolbar_action_t
 QString enum_to_string(j_toolbar_action_t t);
 QString enum_to_icon_path(j_toolbar_action_t t);
 
+using ACTION = QPair<j_toolbar_action_t, QAction*>;
+
 class j_action_toolbar : public QToolBar
 {
     Q_OBJECT
@@ -30,9 +32,10 @@ class j_action_toolbar : public QToolBar
 public:
     j_action_toolbar(QString title = QString(), QWidget* parent = nullptr);
     ~j_action_toolbar() = default;
-    QList<QAction*>* actions() { return action; }
+    QList<ACTION> actions() { return *action; }
     void clear_actions() { action->clear(); clear(); };
-    void add_action(j_toolbar_action_t t, QString tooltip);
+    void add_action(j_toolbar_action_t t, QString tooltip, bool default_enabled = true);
+    void set_enabled(j_toolbar_action_t t, bool value);
 
 signals:
     void to_select();
@@ -47,7 +50,7 @@ signals:
     void to_edit_profile();
 
 private:
-    QList<QAction*>* action = nullptr;
+    QList<ACTION>* action = nullptr;
 
     void connect_to(j_toolbar_action_t t, QAction* a);
 };

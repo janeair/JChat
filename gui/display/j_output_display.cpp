@@ -16,15 +16,10 @@ j_output_display::j_output_display(QWidget* parent)
           )
 {
     /// configure toolbar
-    toolbar()->add_action(j_toolbar_action_t::A_SAVE, "Save to profile");
-    toolbar()->add_action(j_toolbar_action_t::A_OPEN, "Open from profile");
     toolbar()->add_action(j_toolbar_action_t::A_SETTINGS, "Show/hide settings");
+    toolbar()->add_action(j_toolbar_action_t::A_EXPORT, "Export output");
     toolbar()->add_action(j_toolbar_action_t::A_DELETE, "Clear field");
 
-    dlg = new j_profile_dialog(this);
-    connect(dlg, &j_profile_dialog::selected_profile, this, &j_output_display::on_selected_profile);
-    connect(toolbar(), &j_action_toolbar::to_save, this, &j_output_display::save_to_profile_dialog);
-    connect(toolbar(), &j_action_toolbar::to_open, this, &j_output_display::open_profile_dialog);
     connect(toolbar(), &j_action_toolbar::to_delete, [this] { current_stats.clear(); });
 
     field()->setReadOnly(true);
@@ -126,43 +121,4 @@ void j_output_display::save_property_stats(j_msgs_property_stats stats)
     current_stats.clear();
     current_stats.join(&stats, j_stats_join_t::Extend);
     display_property_stats(stats);
-}
-
-void j_output_display::on_change_profiles(QStringList profiles)
-{
-    loaded_profiles = profiles;
-}
-
-void j_output_display::save_to_profile_dialog()
-{
-    dlg->exec_profiles(loaded_profiles, j_profile_dialog_action::SaveNewProfile);
-}
-
-void j_output_display::open_profile_dialog()
-{
-    dlg->exec_profiles(loaded_profiles, j_profile_dialog_action::GetProfileData);
-}
-
-void j_output_display::on_selected_profile(j_profile_dialog_action action, QString name)
-{
-    switch(action)
-    {
-    case j_profile_dialog_action::GetProfileData:
-    {
-        emit get_profile_data(name);
-        break;
-    }
-    case j_profile_dialog_action::SaveNewProfile:
-    {
-        if (!current_stats.is_clear())
-        {
-            emit new_profile(PROFILE(name, std::move(current_stats)));
-            emit log_this(j_log_action_t::SAVE_PROFILE, name);
-            current_stats.clear();
-        }
-        break;
-    }
-    case j_profile_dialog_action::None:
-        break;
-    }
 }
