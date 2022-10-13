@@ -2,7 +2,6 @@
 #define J_ACTION_TOOLBAR_H
 
 #include <QToolBar>
-#include <QObject>
 
 enum class j_toolbar_action_t
 {
@@ -23,8 +22,6 @@ enum class j_toolbar_action_t
 QString enum_to_string(j_toolbar_action_t t);
 QString enum_to_icon_path(j_toolbar_action_t t);
 
-using ACTION = QPair<j_toolbar_action_t, QAction*>;
-
 class j_action_toolbar : public QToolBar
 {
     Q_OBJECT
@@ -32,27 +29,52 @@ class j_action_toolbar : public QToolBar
 public:
     j_action_toolbar(QString title = QString(), QWidget* parent = nullptr);
     ~j_action_toolbar() = default;
-    QList<ACTION> actions() { return *action; }
-    void clear_actions() { action->clear(); clear(); };
-    void add_action(j_toolbar_action_t t, QString tooltip, bool default_enabled = true);
-    void set_enabled(j_toolbar_action_t t, bool value);
-
-signals:
-    void to_select();
-    void to_delete();
-    void to_save();
-    void to_open();
-    void to_import();
-    void to_export();
-    void to_settings();
-    void to_profile();
-    void to_add_profile();
-    void to_edit_profile();
-
-private:
-    QList<ACTION>* action = nullptr;
-
-    void connect_to(j_toolbar_action_t t, QAction* a);
+    template<typename T1, typename T2>
+    void add_action(j_toolbar_action_t t, QString tooltip,
+                    T1 *reciever, void (T1::*reciever_slot)(bool),
+                    T2 *trigger, void (T2::*trigger_signal)(bool), bool default_enabled = true)
+    {
+        QIcon action_icon = QIcon(enum_to_icon_path(t));
+        QAction* new_action = new QAction(action_icon, tooltip, this);
+        new_action->setEnabled(default_enabled);
+        new_action->setCheckable(true);
+        connect(new_action, &QAction::triggered, reciever, reciever_slot);
+        connect(trigger, trigger_signal, new_action, &QAction::setEnabled);
+        addAction(new_action);
+    }
+    template<typename T1, typename T2>
+    void add_action(j_toolbar_action_t t, QString tooltip,
+                    T1 *reciever, void (T1::*reciever_slot)(),
+                    T2 *trigger, void (T2::*trigger_signal)(bool), bool default_enabled = true)
+    {
+        QIcon action_icon = QIcon(enum_to_icon_path(t));
+        QAction* new_action = new QAction(action_icon, tooltip, this);
+        new_action->setEnabled(default_enabled);
+        connect(new_action, &QAction::triggered, reciever, reciever_slot);
+        connect(trigger, trigger_signal, new_action, &QAction::setEnabled);
+        addAction(new_action);
+    }
+    template<typename T>
+    void add_action(j_toolbar_action_t t, QString tooltip,
+                    T *reciever, void (T::*reciever_slot)())
+    {
+        QIcon action_icon = QIcon(enum_to_icon_path(t));
+        QAction* new_action = new QAction(action_icon, tooltip, this);
+        new_action->setEnabled(true);
+        connect(new_action, &QAction::triggered, reciever, reciever_slot);
+        addAction(new_action);
+    }
+    template<typename T>
+    void add_action(j_toolbar_action_t t, QString tooltip,
+                    T *reciever, void (T::*reciever_slot)(bool))
+    {
+        QIcon action_icon = QIcon(enum_to_icon_path(t));
+        QAction* new_action = new QAction(action_icon, tooltip, this);
+        new_action->setEnabled(true);
+        new_action->setCheckable(true);
+        connect(new_action, &QAction::triggered, reciever, reciever_slot);
+        addAction(new_action);
+    }
 };
 
 #endif // J_ACTION_TOOLBAR_H

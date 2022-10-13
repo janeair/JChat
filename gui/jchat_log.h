@@ -26,6 +26,9 @@ public:
     j_log_widget(QWidget* parent = nullptr);
     QTextEdit* log_widget() const { return text_log; }
 
+signals:
+    void log_text_changed(bool is_clear);
+
 public slots:
     void log_message(j_log_action_t t, QString decr = "");
     void clear();

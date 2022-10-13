@@ -7,6 +7,7 @@ j_log_widget::j_log_widget(QWidget* parent) : QDockWidget(parent)
     text_log = new QTextEdit(this);
     text_log->setFixedHeight(40);
     text_log->setReadOnly(true);
+    connect(text_log, &QTextEdit::textChanged, [this] () { emit log_text_changed(text_log->toPlainText().length() > 0); });
 
     setWidget(text_log);
     setWindowTitle("History");

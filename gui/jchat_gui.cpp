@@ -19,17 +19,10 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
     toolbar = new j_action_toolbar("Actions", this);
     log = new j_log_widget(this);
 
-    toolbar->add_action(j_toolbar_action_t::A_EDIT_PROFILE, "Edit Profiles");
-    toolbar->add_action(j_toolbar_action_t::A_EXPORT, "Export history", false);
-    toolbar->add_action(j_toolbar_action_t::A_DELETE, "Clear history", false);
-    connect(toolbar, &j_action_toolbar::to_delete, log, &j_log_widget::clear);
-    connect(log->log_widget(), &QTextEdit::textChanged,
-            [this] ()
-    {
-        bool value = (log->log_widget()->toPlainText().length() > 0);
-        toolbar->set_enabled(j_toolbar_action_t::A_DELETE, value);
-        toolbar->set_enabled(j_toolbar_action_t::A_EXPORT, value);
-    });
+    //toolbar->add_action(j_toolbar_action_t::A_EDIT_PROFILE, "Edit Profiles");
+    //toolbar->add_action(j_toolbar_action_t::A_EXPORT, "Export history", false);
+    toolbar->add_action<j_log_widget, j_log_widget>
+            (j_toolbar_action_t::A_DELETE, "Clear history", log, &j_log_widget::clear, log, &j_log_widget::log_text_changed, false);
 
     connect(input, &j_input_display::to_configure, this, &jchat_gui::configure);
     connect(output, &j_output_display::log_this, log, &j_log_widget::log_message);

@@ -22,6 +22,7 @@ public:
     QTextEdit* field() { return fld; }
 
 signals:
+    void field_text_changed(bool is_clear);
 
 private:
     j_action_toolbar* tb = nullptr;

@@ -16,12 +16,13 @@ j_output_display::j_output_display(QWidget* parent)
           )
 {
     /// configure toolbar
-    toolbar()->add_action(j_toolbar_action_t::A_SETTINGS, "Show/hide settings");
-    toolbar()->add_action(j_toolbar_action_t::A_EXPORT, "Export output");
-    toolbar()->add_action(j_toolbar_action_t::A_DELETE, "Clear field");
+    toolbar()->add_action<j_settings_widget>
+            (j_toolbar_action_t::A_SETTINGS, "Show/hide settings", settings_widget(), &j_settings_widget::setVisible);
+    //toolbar()->add_action(j_toolbar_action_t::A_EXPORT, "Export output");
+    toolbar()->add_action<QTextEdit, j_output_display>
+            (j_toolbar_action_t::A_DELETE, "Clear field", field(), &QTextEdit::clear, this, &j_output_display::field_text_changed, false);
 
-    connect(toolbar(), &j_action_toolbar::to_delete, [this] { current_stats.clear(); });
-
+    /// configure field
     field()->setReadOnly(true);
     field()->setAlignment(Qt::AlignLeft);
 }

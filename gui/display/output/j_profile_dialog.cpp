@@ -19,7 +19,6 @@ j_profile_dialog::j_profile_dialog(QWidget* parent) : QDialog(parent)
     tb->setMovable(false);
     tb->setFloatable(false);
     tb->setOrientation(Qt::Vertical);
-    connect(tb, &j_action_toolbar::to_select, this, &j_profile_dialog::select_profile);
 
     QLabel* profiles_cc = new QLabel("Profiles: 0");
     QGridLayout* layout = new QGridLayout();
@@ -39,7 +38,7 @@ void j_profile_dialog::exec_profiles(QStringList names, j_profile_dialog_action 
         return;
     if (!isVisible())
     {
-        tb->add_action(j_toolbar_action_t::A_SELECT, "Select");
+        //tb->add_action(j_toolbar_action_t::A_SELECT, "Select");
         foreach (auto name, names)
             cb->addItem(name);
         if (action == j_profile_dialog_action::SaveNewProfile)
@@ -54,7 +53,6 @@ void j_profile_dialog::closeEvent(QCloseEvent* event)
 {
     cb->clear();
     cb->setEditable(false);
-    tb->clear_actions();
     current_action = j_profile_dialog_action::None;
     event->accept();
 }
