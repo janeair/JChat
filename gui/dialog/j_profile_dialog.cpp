@@ -15,7 +15,7 @@ j_profile_dialog::j_profile_dialog(QWidget* parent) : QDialog(parent)
     cb->setEditable(false);
     cb->setDuplicatesEnabled(false);
 
-    tb = new j_action_toolbar("", this);
+    tb = new action_toolbar("", this);
     tb->setMovable(false);
     tb->setFloatable(false);
     tb->setOrientation(Qt::Vertical);

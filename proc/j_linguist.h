@@ -3,8 +3,8 @@
 
 #include <QObject>
 
-#include "common/j_ling.h"
-#include "common/j_msgs_general_stats.h"
+#include "common/ling/j_ling.h"
+#include "common/stats/j_msgs_general_stats.h"
 
 class j_linguist : public QObject
 {

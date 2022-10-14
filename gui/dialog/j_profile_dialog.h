@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QComboBox>
 
-class j_action_toolbar;
+class action_toolbar;
 
 enum class j_profile_dialog_action
 {
@@ -31,7 +31,7 @@ signals:
 
 private:
     j_profile_dialog_action current_action =  j_profile_dialog_action::None;
-    j_action_toolbar* tb = nullptr;
+    action_toolbar* tb = nullptr;
     QComboBox* cb = nullptr;
 
 private slots:

@@ -1,22 +1,11 @@
 #ifndef JCHAT_LOG_H
 #define JCHAT_LOG_H
 
+#include "gui/log/j_log_action.h"
+
 #include <QDockWidget>
 
 class QTextEdit;
-
-enum class j_log_action_t
-{
-    ANALYZE_MSG,
-    PROCESS_MSG,
-
-    SAVE_PROFILE,
-    OPEN_PROFILE,
-
-    COUNT
-};
-
-QString enum_to_string(j_log_action_t t);
 
 class j_log_widget : public QDockWidget
 {

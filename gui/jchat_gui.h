@@ -2,11 +2,11 @@
 
 #include <QMainWindow>
 
-#include "common/j_ling.h"
+#include "common/ling/j_ling.h"
 #include "proc/handlers/j_ling_abstract_handler.h"
-#include "common/j_settings.h"
 #include "gui/display/j_input_display.h"
 #include "gui/display/j_output_display.h"
+#include "gui/display/settings/j_settings.h"
 
 class j_log_widget;
 
@@ -31,6 +31,6 @@ public slots:
 private:
     j_input_display* input = nullptr;
     j_output_display* output = nullptr;
-    j_action_toolbar* toolbar = nullptr;
+    action_toolbar* toolbar = nullptr;
     j_log_widget* log = nullptr;
 };

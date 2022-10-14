@@ -1,4 +1,4 @@
-#include "common/j_ling.h"
+#include "common/ling/j_ling.h"
 
 const QString enum_to_string(j_ling_type t)
 {

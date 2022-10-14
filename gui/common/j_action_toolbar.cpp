@@ -1,9 +1,5 @@
 #include "gui/display/j_action_toolbar.h"
 
-j_action_toolbar::j_action_toolbar(QString title, QWidget* parent) : QToolBar(title, parent)
-{
-}
-
 QString enum_to_string(j_toolbar_action_t t)
 {
     switch(t)
@@ -14,6 +10,8 @@ QString enum_to_string(j_toolbar_action_t t)
         return QString("Save");
     case j_toolbar_action_t::A_DELETE:
         return QString("Delete");
+    case j_toolbar_action_t::A_EDIT:
+        return QString("Edit");
     case j_toolbar_action_t::A_IMPORT:
         return QString("Import");
     case j_toolbar_action_t::A_EXPORT:
@@ -43,6 +41,8 @@ QString enum_to_icon_path(j_toolbar_action_t t)
         return QString(":/icons/resources/save_icon.png");
     case j_toolbar_action_t::A_DELETE:
         return QString(":/icons/resources/delete_icon.png");
+    case j_toolbar_action_t::A_EDIT:
+        return QString(":/icons/resources/edit_icon.png");
     case j_toolbar_action_t::A_IMPORT:
         return QString(":/icons/resources/import_icon.png");
     case j_toolbar_action_t::A_EXPORT:
@@ -60,4 +60,9 @@ QString enum_to_icon_path(j_toolbar_action_t t)
     default:
         return QString();
     }
+}
+
+QIcon icon(j_toolbar_action_t t)
+{
+    return QIcon(enum_to_icon_path(t));
 }

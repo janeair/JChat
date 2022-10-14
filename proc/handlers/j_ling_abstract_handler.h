@@ -2,10 +2,9 @@
 #define J_LING_ABSTRACT_HANDLER_H
 
 #include <QObject>
-#include <QDebug>
 
-#include "common/j_ling.h"
-#include "common/j_msgs_property_stats.h"
+#include "common/ling/j_ling.h"
+#include "common/stats/j_msgs_property_stats.h"
 
 enum class j_handler_id
 {

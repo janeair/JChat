@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QString>
-#include "common/j_abstract_stats.h"
+#include "common/stats/j_abstract_stats.h"
 
 enum class j_msgs_general_stats_t
 {

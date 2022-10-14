@@ -8,21 +8,21 @@
 
 #include <QDebug>
 
-#include "gui/display/j_action_toolbar.h"
-#include "gui/jchat_log.h"
-#include "common/j_settings.h"
+#include "gui/common/j_action_toolbar.h"
+#include "gui/log/jchat_log.h"
+#include "gui/display/settings/j_settings.h"
 
 jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
 {
     input = new j_input_display();
     output = new j_output_display();
-    toolbar = new j_action_toolbar("Actions", this);
+    toolbar = new action_toolbar("Actions", this);
     log = new j_log_widget(this);
 
     //toolbar->add_action(j_toolbar_action_t::A_EDIT_PROFILE, "Edit Profiles");
     //toolbar->add_action(j_toolbar_action_t::A_EXPORT, "Export history", false);
     toolbar->add_action<j_log_widget, j_log_widget>
-            (j_toolbar_action_t::A_DELETE, "Clear history", log, &j_log_widget::clear, log, &j_log_widget::log_text_changed, false);
+            (icon(j_toolbar_action_t::A_DELETE), "Clear history", log, &j_log_widget::clear, log, &j_log_widget::log_text_changed, false);
 
     connect(input, &j_input_display::to_configure, this, &jchat_gui::configure);
     connect(output, &j_output_display::log_this, log, &j_log_widget::log_message);

@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "common/j_ling.h"
+#include "common/ling/j_ling.h"
 #include "proc/handlers/j_ling_abstract_handler.h"
 
 class j_msgs_property_stats;

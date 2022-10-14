@@ -1,12 +1,11 @@
 #include "j_output_display.h"
 
-#include "gui/display/j_action_toolbar.h"
-#include "gui/jchat_log.h"
-#include "common/j_settings.h"
-#include "common/j_msg_property.h"
+#include "common/property/j_msg_property.h"
+#include "gui/common/j_action_toolbar.h"
+#include "gui/log/j_log_action.h"
+#include "gui/display/settings/j_settings.h"
 
 #include <QTextEdit>
-#include <QDebug>
 
 j_output_display::j_output_display(QWidget* parent)
     : j_abstract_display(
@@ -17,10 +16,10 @@ j_output_display::j_output_display(QWidget* parent)
 {
     /// configure toolbar
     toolbar()->add_action<j_settings_widget>
-            (j_toolbar_action_t::A_SETTINGS, "Show/hide settings", settings_widget(), &j_settings_widget::setVisible);
+            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings_widget(), &j_settings_widget::setVisible);
     //toolbar()->add_action(j_toolbar_action_t::A_EXPORT, "Export output");
     toolbar()->add_action<QTextEdit, j_output_display>
-            (j_toolbar_action_t::A_DELETE, "Clear field", field(), &QTextEdit::clear, this, &j_output_display::field_text_changed, false);
+            (icon(j_toolbar_action_t::A_DELETE), "Clear field", field(), &QTextEdit::clear, this, &j_output_display::field_text_changed, false);
 
     /// configure field
     field()->setReadOnly(true);

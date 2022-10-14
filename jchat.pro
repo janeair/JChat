@@ -9,19 +9,20 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    common/j_ling.cpp \
     common/j_module_t.cpp \
-    common/j_msg_property.cpp \
-    common/j_msgs_general_stats.cpp \
-    common/j_msgs_property_stats.cpp \
-    common/j_settings.cpp \
+    common/ling/j_ling.cpp \
+    common/property/j_msg_property.cpp \
+    common/stats/j_msgs_general_stats.cpp \
+    common/stats/j_msgs_property_stats.cpp \
+    gui/common/j_action_toolbar.cpp \
+    gui/dialog/j_profile_dialog.cpp \
     gui/display/j_abstract_display.cpp \
-    gui/display/j_action_toolbar.cpp \
     gui/display/j_input_display.cpp \
     gui/display/j_output_display.cpp \
-    gui/display/output/j_profile_dialog.cpp \
+    gui/display/settings/j_settings.cpp \
     gui/jchat_gui.cpp \
-    gui/jchat_log.cpp \
+    gui/log/j_log_action.cpp \
+    gui/log/jchat_log.cpp \
     load/j_profile_loader.cpp \
     main.cpp \
     jchat.cpp \
@@ -32,20 +33,22 @@ SOURCES += \
     proc/j_processor.cpp
 
 HEADERS += \
-    common/j_abstract_stats.h \
-    common/j_ling.h \
     common/j_module_t.h \
-    common/j_msg_property.h \
-    common/j_msgs_general_stats.h \
-    common/j_msgs_property_stats.h \
-    common/j_settings.h \
+    common/ling/j_ling.h \
+    common/property/j_msg_property.h \
+    common/stats/j_abstract_stats.h \
+    common/stats/j_msgs_general_stats.h \
+    common/stats/j_msgs_property_stats.h \
+    gui/common/j_action_toolbar.h \
+    gui/dialog/j_profile_dialog.h \
     gui/display/j_abstract_display.h \
-    gui/display/j_action_toolbar.h \
     gui/display/j_input_display.h \
     gui/display/j_output_display.h \
-    gui/display/output/j_profile_dialog.h \
+    gui/display/settings/j_settings.h \
     gui/jchat_gui.h \
-    gui/jchat_log.h \
+    gui/log/j_log_action.h \
+    gui/log/jchat_log.h \
+    import/action_toolbar.h \
     jchat.h \
     load/j_profile_loader.h \
     proc/handlers/j_general_word_handler.h \

@@ -1,6 +1,7 @@
 #include "j_abstract_display.h"
 
-#include "common/j_settings.h"
+#include "gui/display/settings/j_settings.h"
+#include "import/action_toolbar.h"
 
 #include <QGridLayout>
 #include <QDockWidget>
@@ -10,7 +11,7 @@
 j_abstract_display::j_abstract_display(QString title, j_settings st, QWidget *parent)
     : QDockWidget(parent)
 {
-    tb = new j_action_toolbar("Actions", this);
+    tb = new action_toolbar("Actions", this);
     stngs = new j_settings_widget(st, this);
     fld = new QTextEdit(this);
     connect(fld, &QTextEdit::textChanged, [this] () { emit field_text_changed(fld->toPlainText().length() > 0); });

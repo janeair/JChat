@@ -1,10 +1,10 @@
 #ifndef J_SETTINGS_H
 #define J_SETTINGS_H
 
-#include "common/j_ling.h"
 #include "common/j_module_t.h"
-#include "common/j_msg_property.h"
-#include "common/j_msgs_general_stats.h"
+#include "common/ling/j_ling.h"
+#include "common/property/j_msg_property.h"
+#include "common/stats/j_msgs_general_stats.h"
 #include "proc/handlers/j_ling_abstract_handler.h"
 
 #include <QDockWidget>

@@ -2,7 +2,7 @@
 #define J_INPUT_DISPLAY_H
 
 #include "gui/display/j_abstract_display.h"
-#include "common/j_settings.h"
+#include "gui/display/settings/j_settings.h"
 
 class j_input_display : public j_abstract_display
 {

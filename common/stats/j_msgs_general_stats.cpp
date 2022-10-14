@@ -1,5 +1,5 @@
-#include "common/j_msgs_general_stats.h"
-#include "common/j_ling.h"
+#include "common/stats/j_msgs_general_stats.h"
+#include "common/ling/j_ling.h"
 
 const QString enum_to_string(j_msgs_general_stats_t t)
 {

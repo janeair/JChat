@@ -1,7 +1,7 @@
 #ifndef J_PROFILE_LOADER_H
 #define J_PROFILE_LOADER_H
 
-#include "common/j_msgs_property_stats.h"
+#include "common/stats/j_msgs_property_stats.h"
 
 #include <QObject>
 #include <QHash>

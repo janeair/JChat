@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "common/j_msgs_property_stats.h"
+#include "common/stats/j_msgs_property_stats.h"
 
 class j_profile_loader;
 

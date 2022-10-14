@@ -1,9 +1,9 @@
 #ifndef J_OUTPUT_DISPLAY_H
 #define J_OUTPUT_DISPLAY_H
 
-#include "common/j_ling.h"
-#include "common/j_msgs_general_stats.h"
-#include "common/j_msgs_property_stats.h"
+#include "common/ling/j_ling.h"
+#include "common/stats/j_msgs_general_stats.h"
+#include "common/stats/j_msgs_property_stats.h"
 #include "gui/display/j_abstract_display.h"
 
 enum class j_log_action_t;

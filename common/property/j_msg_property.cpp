@@ -1,4 +1,4 @@
-#include "common/j_msg_property.h"
+#include "common/property/j_msg_property.h"
 
 const QString enum_to_string(j_property_id id)
 {

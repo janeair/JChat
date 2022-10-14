@@ -1,4 +1,4 @@
-#include "common/j_settings.h"
+#include "gui/display/settings/j_settings.h"
 
 #include <QCheckBox>
 #include <QTreeWidget>

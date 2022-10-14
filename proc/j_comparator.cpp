@@ -1,7 +1,7 @@
 #include "j_comparator.h"
 
 #include "load/j_profile_loader.h"
-#include "common/j_msg_property.h"
+#include "common/property/j_msg_property.h"
 
 #include <QDebug>
 

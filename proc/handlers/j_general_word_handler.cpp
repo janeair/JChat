@@ -1,6 +1,6 @@
 #include "j_general_word_handler.h"
-#include "common/j_msg_property.h"
-#include "common/j_msgs_property_stats.h"
+#include "common/property/j_msg_property.h"
+#include "common/stats/j_msgs_property_stats.h"
 
 #include <QDebug>
 

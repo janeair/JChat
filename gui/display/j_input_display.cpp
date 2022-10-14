@@ -1,6 +1,6 @@
 #include "gui/display/j_input_display.h"
 
-#include "gui/display/j_action_toolbar.h"
+#include "gui/common/j_action_toolbar.h"
 
 #include <QTextEdit>
 
@@ -13,12 +13,12 @@ j_input_display::j_input_display(QWidget* parent)
 {
     /// configure toolbar
     toolbar()->add_action<j_input_display, j_input_display>
-            (j_toolbar_action_t::A_SELECT, "Process text", this, &j_input_display::process_input, this, &j_input_display::field_text_changed, false);
+            (icon(j_toolbar_action_t::A_SELECT), "Process text", this, &j_input_display::process_input, this, &j_input_display::field_text_changed, false);
     toolbar()->add_action<j_settings_widget>
-            (j_toolbar_action_t::A_SETTINGS, "Show/hide settings", settings_widget(), &j_settings_widget::setVisible);
+            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings_widget(), &j_settings_widget::setVisible);
     //toolbar()->add_action(j_toolbar_action_t::A_EXPORT, "Export input");
     toolbar()->add_action<QTextEdit, j_input_display>
-            (j_toolbar_action_t::A_DELETE, "Clear field", field(), &QTextEdit::clear, this, &j_input_display::field_text_changed, false);
+            (icon(j_toolbar_action_t::A_DELETE), "Clear field", field(), &QTextEdit::clear, this, &j_input_display::field_text_changed, false);
 
     /// configure field
     field()->setAlignment(Qt::AlignLeft);

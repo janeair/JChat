@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QList>
-#include "common/j_abstract_stats.h"
+#include "common/stats/j_abstract_stats.h"
 
 class j_abstract_property;
 
