@@ -14,6 +14,10 @@ QString enum_to_string(j_log_action_t t)
         return QString("saving profile");
     case j_log_action_t::OPEN_PROFILE:
         return QString("opening profile");
+    case j_log_action_t::IMPORT_DATA:
+        return QString("import to");
+    case j_log_action_t::EXPORT_DATA:
+        return QString("export from");
     default:
         return QString();
     }

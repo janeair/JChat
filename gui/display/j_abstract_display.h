@@ -8,6 +8,8 @@ class j_settings_widget;
 class action_toolbar;
 class QTextEdit;
 
+enum class j_log_action_t;
+
 class j_abstract_display : public QDockWidget
 {
     Q_OBJECT
@@ -20,8 +22,13 @@ public:
     j_settings_widget* settings_widget() { return stngs; }
     QTextEdit* field() { return fld; }
 
+public slots:
+    void export_from_field();
+    void import_to_field();
+
 signals:
     void field_text_changed(bool is_clear);
+    void log_this(j_log_action_t t, QString decr);
 
 private:
     action_toolbar* tb = nullptr;

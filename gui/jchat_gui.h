@@ -27,6 +27,7 @@ signals:
 
 public slots:
     void configure(uint32_t msgs, j_settings st);
+    void export_from_log();
 
 private:
     j_input_display* input = nullptr;

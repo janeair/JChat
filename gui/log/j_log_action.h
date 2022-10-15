@@ -11,6 +11,9 @@ enum class j_log_action_t
     SAVE_PROFILE,
     OPEN_PROFILE,
 
+    IMPORT_DATA,
+    EXPORT_DATA,
+
     COUNT
 };
 

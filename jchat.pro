@@ -16,6 +16,7 @@ SOURCES += \
     common/stats/j_msgs_property_stats.cpp \
     gui/common/j_action_toolbar.cpp \
     gui/dialog/j_profile_dialog.cpp \
+    gui/dialog/text_file_io_dialog.cpp \
     gui/display/j_abstract_display.cpp \
     gui/display/j_input_display.cpp \
     gui/display/j_output_display.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     common/stats/j_msgs_property_stats.h \
     gui/common/j_action_toolbar.h \
     gui/dialog/j_profile_dialog.h \
+    gui/dialog/text_file_io_dialog.h \
     gui/display/j_abstract_display.h \
     gui/display/j_input_display.h \
     gui/display/j_output_display.h \

@@ -9,8 +9,6 @@
 #include "proc/j_comparator.h"
 #include "load/j_profile_loader.h"
 
-class j_processor;
-
 class jchat : public QObject
 {
     Q_OBJECT
@@ -20,10 +18,11 @@ public:
     ~jchat() = default;
 
 private:
-    std::unique_ptr<jchat_gui> gui = nullptr;
-    std::unique_ptr<j_linguist> linguist = nullptr;
-    std::unique_ptr<j_processor> processor = nullptr;
-    std::unique_ptr<j_comparator> comparator = nullptr;
-    std::unique_ptr<j_profile_loader> loader = nullptr;
+    std::unique_ptr<jchat_gui>          gui         = nullptr;
+    std::unique_ptr<j_linguist>         linguist    = nullptr;
+    std::unique_ptr<j_processor>        processor   = nullptr;
+    std::unique_ptr<j_comparator>       comparator  = nullptr;
+    std::unique_ptr<j_profile_loader>   loader      = nullptr;
 };
+
 #endif // JCHAT_H

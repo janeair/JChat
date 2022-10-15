@@ -17,7 +17,8 @@ j_output_display::j_output_display(QWidget* parent)
     /// configure toolbar
     toolbar()->add_action<j_settings_widget>
             (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings_widget(), &j_settings_widget::setVisible);
-    //toolbar()->add_action(j_toolbar_action_t::A_EXPORT, "Export output");
+    toolbar()->add_action<j_output_display, j_output_display>
+            (icon(j_toolbar_action_t::A_EXPORT), "Export to text file", this, &j_output_display::export_from_field, this, &j_output_display::field_text_changed, false);
     toolbar()->add_action<QTextEdit, j_output_display>
             (icon(j_toolbar_action_t::A_DELETE), "Clear field", field(), &QTextEdit::clear, this, &j_output_display::field_text_changed, false);
 

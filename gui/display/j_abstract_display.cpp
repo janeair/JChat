@@ -1,6 +1,8 @@
 #include "j_abstract_display.h"
 
 #include "gui/display/settings/j_settings.h"
+#include "gui/dialog/text_file_io_dialog.h"
+#include "gui/log/j_log_action.h"
 #include "import/action_toolbar.h"
 
 #include <QGridLayout>
@@ -26,4 +28,22 @@ j_abstract_display::j_abstract_display(QString title, j_settings st, QWidget *pa
     setWidget(w);
 
     setWindowTitle(title);
+}
+
+void j_abstract_display::import_to_field()
+{
+    fld->clear();
+    QStringList text = io_dialog::open_text_content(this);
+    foreach (auto string, text)
+        fld->append(string);
+    emit log_this(j_log_action_t::IMPORT_DATA, windowTitle().toLower());
+}
+
+void j_abstract_display::export_from_field()
+{
+    if (io_dialog::save_text_content(this, fld->toPlainText()))
+    {
+        fld->clear();
+        emit log_this(j_log_action_t::EXPORT_DATA, windowTitle().toLower());
+    }
 }

@@ -20,7 +20,6 @@ public:
     j_output_display(QWidget* parent = nullptr);
 
 signals:
-    void log_this(j_log_action_t t, QString decr);
 
 public slots:
     void display_lings(QList<j_ling> lings);

@@ -11,6 +11,7 @@
 #include "gui/common/j_action_toolbar.h"
 #include "gui/log/jchat_log.h"
 #include "gui/display/settings/j_settings.h"
+#include "gui/dialog/text_file_io_dialog.h"
 
 jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
 {
@@ -20,12 +21,14 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
     log = new j_log_widget(this);
 
     //toolbar->add_action(j_toolbar_action_t::A_EDIT_PROFILE, "Edit Profiles");
-    //toolbar->add_action(j_toolbar_action_t::A_EXPORT, "Export history", false);
+    toolbar->add_action<jchat_gui, j_log_widget>
+            (icon(j_toolbar_action_t::A_EXPORT), "Export history", this, &jchat_gui::export_from_log, log, &j_log_widget::log_text_changed, false);
     toolbar->add_action<j_log_widget, j_log_widget>
             (icon(j_toolbar_action_t::A_DELETE), "Clear history", log, &j_log_widget::clear, log, &j_log_widget::log_text_changed, false);
 
     connect(input, &j_input_display::to_configure, this, &jchat_gui::configure);
     connect(output, &j_output_display::log_this, log, &j_log_widget::log_message);
+    connect(input, &j_input_display::log_this, log, &j_log_widget::log_message);
 
     setWindowIcon(QIcon(":/icons/resources/app_icon.ico"));
 
@@ -51,4 +54,10 @@ void jchat_gui::configure(uint32_t msgs, j_settings st)
                 emit to_configure_comp();
         }
     }
+}
+
+void jchat_gui::export_from_log()
+{
+    if (io_dialog::save_text_content(this, log->log_widget()->toPlainText()))
+        log->log_message(j_log_action_t::EXPORT_DATA, log->windowTitle().toLower());
 }
