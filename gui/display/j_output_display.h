@@ -8,9 +8,9 @@
 
 enum class j_log_action_t;
 
-using PROFILE = QPair<QString, j_msgs_property_stats>;
-using PROFILE_P = QPair<QString, j_msgs_property_stats*>;
-using COMPARE_RES = QPair<QString, double>;
+using profile_t = QPair<QString, j_msgs_property_stats>;
+using profile_t_pointer = QPair<QString, j_msgs_property_stats*>;
+using compare_result = QPair<QString, double>;
 
 class j_output_display : public j_abstract_display
 {
@@ -25,8 +25,8 @@ public slots:
     void display_lings(QList<j_ling> lings);
     void display_general_stats(j_msgs_general_stats stats);
     void display_property_stats(j_msgs_property_stats stats);
-    void display_profile(PROFILE_P profile);
-    void display_compare_results(QList<COMPARE_RES> list);
+    void display_profile(profile_t_pointer profile);
+    void display_compare_results(QList<compare_result> list);
     void save_property_stats(j_msgs_property_stats stats);
 
 private:

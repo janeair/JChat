@@ -11,12 +11,11 @@ CONFIG += c++11
 SOURCES += \
     common/j_module_t.cpp \
     common/ling/j_ling.cpp \
+    common/profile/j_profile.cpp \
     common/property/j_msg_property.cpp \
     common/stats/j_msgs_general_stats.cpp \
     common/stats/j_msgs_property_stats.cpp \
     gui/common/j_action_toolbar.cpp \
-    gui/dialog/j_profile_dialog.cpp \
-    gui/dialog/text_file_io_dialog.cpp \
     gui/display/j_abstract_display.cpp \
     gui/display/j_input_display.cpp \
     gui/display/j_output_display.cpp \
@@ -24,6 +23,8 @@ SOURCES += \
     gui/jchat_gui.cpp \
     gui/log/j_log_action.cpp \
     gui/log/jchat_log.cpp \
+    gui/subwindow/j_profile_editor.cpp \
+    gui/subwindow/text_file_io_dialog.cpp \
     load/j_profile_loader.cpp \
     main.cpp \
     jchat.cpp \
@@ -36,13 +37,12 @@ SOURCES += \
 HEADERS += \
     common/j_module_t.h \
     common/ling/j_ling.h \
+    common/profile/j_profile.h \
     common/property/j_msg_property.h \
     common/stats/j_abstract_stats.h \
     common/stats/j_msgs_general_stats.h \
     common/stats/j_msgs_property_stats.h \
     gui/common/j_action_toolbar.h \
-    gui/dialog/j_profile_dialog.h \
-    gui/dialog/text_file_io_dialog.h \
     gui/display/j_abstract_display.h \
     gui/display/j_input_display.h \
     gui/display/j_output_display.h \
@@ -50,6 +50,8 @@ HEADERS += \
     gui/jchat_gui.h \
     gui/log/j_log_action.h \
     gui/log/jchat_log.h \
+    gui/subwindow/j_profile_editor.h \
+    gui/subwindow/text_file_io_dialog.h \
     import/action_toolbar.h \
     jchat.h \
     load/j_profile_loader.h \

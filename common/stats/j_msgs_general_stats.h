@@ -24,7 +24,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(j_msgs_general_stats_types);
 
 enum class j_ling_type;
 
-class j_msgs_general_stats : public j_abstract_stats
+class j_msgs_general_stats final: public j_abstract_stats
 {
 public:
     j_msgs_general_stats()

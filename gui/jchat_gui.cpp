@@ -11,7 +11,8 @@
 #include "gui/common/j_action_toolbar.h"
 #include "gui/log/jchat_log.h"
 #include "gui/display/settings/j_settings.h"
-#include "gui/dialog/text_file_io_dialog.h"
+#include "gui/subwindow/j_profile_editor.h"
+#include "gui/subwindow/text_file_io_dialog.h"
 
 jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
 {
@@ -19,8 +20,10 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
     output = new j_output_display();
     toolbar = new action_toolbar("Actions", this);
     log = new j_log_widget(this);
+    editor = new j_profile_editor(this);
 
-    //toolbar->add_action(j_toolbar_action_t::A_EDIT_PROFILE, "Edit Profiles");
+    toolbar->add_action<jchat_gui>
+            (icon(j_toolbar_action_t::A_EDIT_PROFILE), "Profile editor", this, &jchat_gui::show_editor);
     toolbar->add_action<jchat_gui, j_log_widget>
             (icon(j_toolbar_action_t::A_EXPORT), "Export history", this, &jchat_gui::export_from_log, log, &j_log_widget::log_text_changed, false);
     toolbar->add_action<j_log_widget, j_log_widget>
@@ -32,12 +35,18 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
 
     setWindowIcon(QIcon(":/icons/resources/app_icon.ico"));
 
-    QMainWindow* central_scene = new QMainWindow();
+    auto central_scene = new QMainWindow();
     central_scene->addDockWidget(Qt::LeftDockWidgetArea, input);
     central_scene->addDockWidget(Qt::RightDockWidgetArea, output);
     setCentralWidget(central_scene);
     addDockWidget(Qt::BottomDockWidgetArea, log);
     addToolBar(Qt::LeftToolBarArea, toolbar);
+}
+
+void jchat_gui::set_profile_base(j_profile_base *p_base)
+{
+    if (editor->get_data_model())
+        editor->get_data_model()->set_profile_base(p_base);
 }
 
 void jchat_gui::configure(uint32_t msgs, j_settings st)
@@ -60,4 +69,10 @@ void jchat_gui::export_from_log()
 {
     if (io_dialog::save_text_content(this, log->log_widget()->toPlainText()))
         log->log_message(j_log_action_t::EXPORT_DATA, log->windowTitle().toLower());
+}
+
+void jchat_gui::show_editor()
+{
+    if (editor && editor->isHidden())
+        editor->show();
 }

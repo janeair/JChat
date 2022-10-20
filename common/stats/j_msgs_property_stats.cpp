@@ -18,6 +18,11 @@ j_msgs_property_stats::j_msgs_property_stats(const j_msgs_property_stats &anothe
     }
 }
 
+j_msgs_property_stats::~j_msgs_property_stats()
+{
+    delete(property_list);
+}
+
 bool j_msgs_property_stats::append(j_abstract_property* property)
 {
     if (property_list)
@@ -70,6 +75,7 @@ bool j_msgs_property_stats::join(j_abstract_stats* another, j_stats_join_t type)
             append(std::move(prop));
         }
     }
+    delete(static_cast<j_msgs_property_stats*>(another));
     return true;
 }
 

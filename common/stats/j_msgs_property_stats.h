@@ -5,12 +5,12 @@
 
 class j_abstract_property;
 
-class j_msgs_property_stats : public j_abstract_stats
+class j_msgs_property_stats final : public j_abstract_stats
 {
 public:
     j_msgs_property_stats();
     j_msgs_property_stats(const j_msgs_property_stats &another);
-    ~j_msgs_property_stats() = default;
+    ~j_msgs_property_stats();
 
     const QList<j_abstract_property*> list() const { return *property_list; };
     bool append(j_abstract_property* property);

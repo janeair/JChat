@@ -96,7 +96,7 @@ void j_output_display::display_property_stats(j_msgs_property_stats stats)
     field()->append("------------");
 }
 
-void j_output_display::display_profile(PROFILE_P profile)
+void j_output_display::display_profile(profile_t_pointer profile)
 {
     field()->clear();
     field()->setTextColor(Qt::black);
@@ -105,7 +105,7 @@ void j_output_display::display_profile(PROFILE_P profile)
     emit log_this(j_log_action_t::OPEN_PROFILE, profile.first);
 }
 
-void j_output_display::display_compare_results(QList<COMPARE_RES> list)
+void j_output_display::display_compare_results(QList<compare_result> list)
 {
     if (list.count() > 0)
     {

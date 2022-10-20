@@ -1,7 +1,7 @@
 #include "j_abstract_display.h"
 
 #include "gui/display/settings/j_settings.h"
-#include "gui/dialog/text_file_io_dialog.h"
+#include "gui/subwindow/text_file_io_dialog.h"
 #include "gui/log/j_log_action.h"
 #include "import/action_toolbar.h"
 

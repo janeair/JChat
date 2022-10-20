@@ -1,4 +1,4 @@
-#include "gui/display/j_action_toolbar.h"
+#include "gui/common/j_action_toolbar.h"
 
 QString enum_to_string(j_toolbar_action_t t)
 {

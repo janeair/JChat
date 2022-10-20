@@ -1,19 +1,13 @@
 #include "j_comparator.h"
 
-#include "load/j_profile_loader.h"
 #include "common/property/j_msg_property.h"
+#include "common/profile/j_profile.h"
 
 #include <QDebug>
 
-j_comparator::j_comparator(QObject *parent) : QObject(parent)
-{
+j_comparator::j_comparator(QObject *parent) : QObject(parent) {}
 
-}
-
-j_comparator::j_comparator(j_profile_loader *loader, QObject *parent) : QObject(parent), base(loader)
-{
-
-}
+j_comparator::j_comparator(j_profile_base *p_base, QObject *parent) : QObject(parent), base(p_base) {}
 
 void j_comparator::compare_stats_with_base(j_msgs_property_stats stats)
 {
@@ -22,15 +16,17 @@ void j_comparator::compare_stats_with_base(j_msgs_property_stats stats)
     else
         return;
 
-    QList<COMPARE_RES> res_list;
-    QStringList profile_names = base->profiles_name_list();
-    foreach (auto name, profile_names)
+    QList<compare_res> res_list;
+    const auto profiles = base->get_profiles();
+    foreach (auto p, profiles)
     {
-        j_msgs_property_stats* profile_data = base->profile_stats(name);
-        if (profile_data)
+        if (!p)
+            continue;
+        j_msgs_property_stats* p_data = p->get_data();
+        if (p_data && p->is_valid())
         {
-            auto res = compare_stats(stats, *profile_data);
-            res_list.append(COMPARE_RES(name, res));
+            auto res = compare_stats(stats, *p_data);
+            res_list.append(compare_res(p->get_name(), res));
         }
     }
     if (res_list.count() > 0)
@@ -41,12 +37,12 @@ void j_comparator::compare_stats_with_base(j_msgs_property_stats stats)
 
 void j_comparator::configure_settings()
 {
-    assert(state == j_comparator_state_t::Not_Ready);
+    Q_ASSERT (state == j_comparator_state_t::Not_Ready);
     state = j_comparator_state_t::Is_Ready;
     qDebug() << "comparator: configure settings";
 }
 
-double j_comparator::compare_stats(j_msgs_property_stats first, j_msgs_property_stats second)
+double j_comparator::compare_stats(const j_msgs_property_stats &first, const j_msgs_property_stats &second)
 {
     double res = 0.;
     int res_value = 0;
