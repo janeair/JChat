@@ -32,7 +32,7 @@ public:
     j_ling_types types() const { return ling_types; }
 
 signals:
-    void stats_ready(j_msgs_property_stats stats);
+    void stats_ready(j_msgs_property_stats &stats);
 
 protected:
     void work() { busy = !busy; }

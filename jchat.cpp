@@ -20,8 +20,11 @@ jchat::jchat() : QObject()
     connect(linguist.get(), &j_linguist::to_process, processor.get(), &j_processor::put_to_buffer);
     connect(processor.get(), &j_processor::to_compare, comparator.get(), &j_comparator::compare_stats_with_base);
 
-    connect(processor.get(), &j_processor::stats_to_gui, gui.get()->get_output(), &j_output_display::save_property_stats);
+    connect(processor.get(), &j_processor::stats_to_gui, gui.get()->get_output(), &j_output_display::display_property_stats);
     connect(comparator.get(), &j_comparator::results_to_gui, gui.get()->get_output(), &j_output_display::display_compare_results);
+
+    ///connect profile editor
+    connect(processor.get(), &j_processor::stats_to_gui, gui.get()->get_editor(), &j_profile_editor::set_current_stats);
 
     /// configure proc with gui settings
     connect(gui.get(), &jchat_gui::to_configure_ling, linguist.get(), &j_linguist::configure_settings);

@@ -17,18 +17,18 @@ public:
     ~j_processor() = default;
 
     bool is_busy() const;
-    const j_msgs_property_stats stats() const;
+    const j_msgs_property_stats &stats() const;
 
 signals:
-    void stats_to_gui(j_msgs_property_stats stats);
-    void to_compare(j_msgs_property_stats stats);
+    void stats_to_gui(const j_msgs_property_stats &stats);
+    void to_compare(const j_msgs_property_stats &stats);
 
 public slots:
     void configure_settings(uint32_t msgs_count, j_handlers handler_types);
     void put_to_buffer(QList<j_ling> lings);
 
 private slots:
-    void add_stats(j_msgs_property_stats stats);
+    void add_stats(j_msgs_property_stats &stats);
 
 private:
     uint32_t msgs_to_proc = 0;

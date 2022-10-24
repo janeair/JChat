@@ -7,9 +7,12 @@ enum class j_log_action_t
 {
     ANALYZE_MSG,
     PROCESS_MSG,
+    COMPARE_MSG,
 
     SAVE_PROFILE,
     OPEN_PROFILE,
+    DELETE_PROFILE,
+    RENAME_PROFILE,
 
     IMPORT_DATA,
     EXPORT_DATA,

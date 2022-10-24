@@ -51,7 +51,7 @@ void j_output_display::display_lings(QList<j_ling> lings)
     field()->append("------------");
 }
 
-void j_output_display::display_general_stats(j_msgs_general_stats stats)
+void j_output_display::display_general_stats(const j_msgs_general_stats &stats)
 {
     auto settings = static_cast<j_msgs_general_stats_types>(settings_widget()->settings().get_settings(j_settings_t::General));
     if (settings.testFlag(j_msgs_general_stats_t::None))
@@ -69,7 +69,7 @@ void j_output_display::display_general_stats(j_msgs_general_stats stats)
     field()->append("------------");
 }
 
-void j_output_display::display_property_stats(j_msgs_property_stats stats)
+void j_output_display::display_property_stats(const j_msgs_property_stats &stats)
 {
     auto settings = static_cast<j_property_ids>(settings_widget()->settings().get_settings(j_settings_t::Properties));
     if (settings.testFlag(j_property_id::NONE))
@@ -96,13 +96,13 @@ void j_output_display::display_property_stats(j_msgs_property_stats stats)
     field()->append("------------");
 }
 
-void j_output_display::display_profile(profile_t_pointer profile)
+void j_output_display::display_profile(const j_profile *p)
 {
     field()->clear();
     field()->setTextColor(Qt::black);
-    field()->append(profile.first + ":");
-    display_property_stats(*(profile.second));
-    emit log_this(j_log_action_t::OPEN_PROFILE, profile.first);
+    field()->append(p->get_name() + ":");
+    display_property_stats(p->get_data());
+    Q_EMIT log_this(j_log_action_t::OPEN_PROFILE, p->get_name());
 }
 
 void j_output_display::display_compare_results(QList<compare_result> list)
@@ -115,11 +115,4 @@ void j_output_display::display_compare_results(QList<compare_result> list)
         field()->setTextColor(Qt::black);
         field()->append("------------");
     }
-}
-
-void j_output_display::save_property_stats(j_msgs_property_stats stats)
-{
-    current_stats.clear();
-    current_stats.join(&stats, j_stats_join_t::Extend);
-    display_property_stats(stats);
 }

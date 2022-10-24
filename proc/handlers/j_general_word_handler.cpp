@@ -42,5 +42,5 @@ void j_general_word_handler::process_msg(QList<j_ling> msg)
 
     work(); /// end processing
 
-    emit stats_ready(std::move(data));
+    Q_EMIT stats_ready(data);
 }

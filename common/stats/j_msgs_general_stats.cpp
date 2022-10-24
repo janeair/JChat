@@ -71,7 +71,6 @@ bool j_msgs_general_stats::join(j_abstract_stats *another, j_stats_join_t type)
         break;
         }
     }
-    delete(static_cast<j_msgs_general_stats*>(another));
     return true;
 }
 

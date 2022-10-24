@@ -109,12 +109,12 @@ void j_linguist::process_msg(QString text)
     msgs_ready++;
     if (!is_busy())
     {
-        emit lings_to_gui(std::move(ling_list));
-        emit stats_to_gui(std::move(*ling_stats));
+        Q_EMIT lings_to_gui(std::move(ling_list));
+        Q_EMIT stats_to_gui(std::move(*ling_stats));
         clear();
     }
 
-    emit to_process(std::move(lings_out));
+    Q_EMIT to_process(std::move(lings_out));
 }
 
 bool j_linguist::is_busy() const

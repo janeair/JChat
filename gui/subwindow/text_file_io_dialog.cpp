@@ -1,4 +1,4 @@
-#include "gui/dialog/text_file_io_dialog.h"
+#include "gui/subwindow/text_file_io_dialog.h"
 
 #include <QFileDialog>
 #include <QDir>

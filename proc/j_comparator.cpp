@@ -11,26 +11,26 @@ j_comparator::j_comparator(j_profile_base *p_base, QObject *parent) : QObject(pa
 
 void j_comparator::compare_stats_with_base(j_msgs_property_stats stats)
 {
-    if (state == j_comparator_state_t::Is_Ready)
-        state = j_comparator_state_t::Is_Busy;
-    else
+    if (state != j_comparator_state_t::Is_Ready)
         return;
+    else
+        state = j_comparator_state_t::Is_Busy;
 
     QList<compare_res> res_list;
-    const auto profiles = base->get_profiles();
-    foreach (auto p, profiles)
+    const auto &profiles = base->get_profiles();
+    for (auto p: profiles)
     {
         if (!p)
             continue;
-        j_msgs_property_stats* p_data = p->get_data();
-        if (p_data && p->is_valid())
+        j_msgs_property_stats p_data = p->get_data();
+        if (p->is_valid())
         {
-            auto res = compare_stats(stats, *p_data);
+            auto res = compare_stats(stats, p_data);
             res_list.append(compare_res(p->get_name(), res));
         }
     }
     if (res_list.count() > 0)
-        emit results_to_gui(std::move(res_list));
+        Q_EMIT results_to_gui(std::move(res_list));
 
     state = j_comparator_state_t::Not_Ready;
 }
@@ -38,7 +38,8 @@ void j_comparator::compare_stats_with_base(j_msgs_property_stats stats)
 void j_comparator::configure_settings()
 {
     Q_ASSERT (state == j_comparator_state_t::Not_Ready);
-    state = j_comparator_state_t::Is_Ready;
+    if (base->count() > 0)
+        state = j_comparator_state_t::Is_Ready;
     qDebug() << "comparator: configure settings";
 }
 

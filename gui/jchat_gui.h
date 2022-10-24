@@ -6,10 +6,10 @@
 #include "proc/handlers/j_ling_abstract_handler.h"
 #include "gui/display/j_input_display.h"
 #include "gui/display/j_output_display.h"
+#include "gui/subwindow/j_profile_editor.h"
 #include "gui/display/settings/j_settings.h"
 
 class j_log_widget;
-class j_profile_editor;
 class j_profile_base;
 
 class jchat_gui : public QMainWindow
@@ -20,6 +20,8 @@ public:
     explicit jchat_gui(QWidget *parent = nullptr);
     j_input_display* get_input() { return input; }
     j_output_display* get_output() { return output; }
+    j_profile_editor* get_editor() { return editor; }
+    j_log_widget* get_log() { return log; }
     void set_profile_base(j_profile_base* p_base);
 
 signals:

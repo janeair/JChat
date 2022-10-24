@@ -13,6 +13,11 @@ const QString enum_to_string(j_property_id id)
     }
 }
 
+j_simple_property::j_simple_property(const j_simple_property &another) : j_abstract_property(another.id_enum())
+{
+    set_data(another.data());
+}
+
 double j_simple_property::correlation(j_abstract_property *another)
 {
     if (another && another->is_simple() && can_be_merged(this, another))

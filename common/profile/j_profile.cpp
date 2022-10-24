@@ -1,4 +1,4 @@
-#include "j_profile.h"
+#include "common/profile/j_profile.h"
 
 #include "common/stats/j_msgs_property_stats.h"
 
@@ -7,24 +7,40 @@ QString enum_to_string(j_profile_type t)
     switch (t)
     {
     case j_profile_type::loaded_normal:
-        return QString("OK");
+        return QString("ok");
     case j_profile_type::loaded_error:
-        return QString("ERROR");
+        return QString("error");
     case j_profile_type::created_user:
-        return QString("USER");
+        return QString("user");
     case j_profile_type::created_default:
-        return QString("DEFAULT");
+        return QString("default");
     default:
         return QString();
     }
 }
 
-j_profile::j_profile(const QString &p_name, j_profile_type p_type, j_msgs_property_stats *p_data)
+QColor enum_to_color(j_profile_type t)
+{
+    switch (t)
+    {
+    case j_profile_type::loaded_normal:
+        return Qt::darkGreen;
+    case j_profile_type::loaded_error:
+        return Qt::darkRed;
+    case j_profile_type::created_user:
+        return Qt::darkBlue;
+    case j_profile_type::created_default:
+        return Qt::black;
+    default:
+        return Qt::black;
+    }
+}
+
+j_profile::j_profile(const QString &p_name, j_profile_type p_type, j_msgs_property_stats p_data)
     : name(p_name), type(p_type), data(std::move(p_data)) { }
 
 j_profile::~j_profile()
 {
-    delete(data);
 }
 
 void j_profile::set_name(const QString &p_name)
@@ -32,7 +48,7 @@ void j_profile::set_name(const QString &p_name)
     name = p_name;
 }
 
-void j_profile::set_data(j_msgs_property_stats *p_data, j_profile_data_action action)
+void j_profile::set_data(j_msgs_property_stats p_data, j_profile_data_action action)
 {
     switch (action)
     {
@@ -41,15 +57,9 @@ void j_profile::set_data(j_msgs_property_stats *p_data, j_profile_data_action ac
         data = std::move(p_data);
         break;
     }
-    case j_profile_data_action::replace_and_delete:
-    {
-        delete(data);
-        data = std::move(p_data);
-        break;
-    }
     case j_profile_data_action::merge:
     {
-        data->join(p_data, j_stats_join_t::Merge);
+        data.join(&p_data, j_stats_join_t::Merge);
         break;
     }
     default:
@@ -57,14 +67,16 @@ void j_profile::set_data(j_msgs_property_stats *p_data, j_profile_data_action ac
     }
 }
 
-j_profile_base::j_profile_base()
+///###############################################################
+
+j_profile_base::j_profile_base(QObject *parent) : QObject(parent)
 {
-    profiles = new QList<j_profile*>();
 }
 
 j_profile_base::~j_profile_base()
 {
-    delete(profiles);
+    for (auto p : profiles)
+        delete(p);
 }
 
 const j_profile *j_profile_base::get_profile(const QString &name) const
@@ -72,12 +84,30 @@ const j_profile *j_profile_base::get_profile(const QString &name) const
     return name_to_profile.value(name, nullptr);
 }
 
-const j_msgs_property_stats *j_profile_base::get_profile_data(const QString &name) const
+const j_msgs_property_stats j_profile_base::get_profile_data(const QString &name) const
 {
     j_profile* p = name_to_profile.value(name, nullptr);
     if (p)
         return p->get_data();
-    return nullptr;
+    else
+        return j_msgs_property_stats();
+}
+
+int j_profile_base::index(const QString &name) const
+{
+    auto p = name_to_profile.value(name, nullptr);
+    if (p)
+    {
+        auto it = std::find_if(profiles.begin(), profiles.end(), [p] (j_profile* p_base) { return (p == p_base); });
+        return it - profiles.begin();
+    }
+    else
+        return -1;
+}
+
+const j_profile *j_profile_base::get_profile(int index) const
+{
+    return (index >= 0 && index < (int)profiles.size()) ? profiles.at(index) : nullptr;
 }
 
 bool j_profile_base::add_profile(j_profile *p_new)
@@ -92,32 +122,24 @@ bool j_profile_base::add_profile(j_profile *p_new)
     }
     else
     {
-        if (!profiles)
-            return false;
-        else
-        {
-            profiles->append(p_new);
-            name_to_profile.insert(p_new->get_name(), p_new);
-        }
+        profiles.push_back(p_new);
+        name_to_profile.insert(p_new->get_name(), p_new);
+        Q_EMIT profile_count_changed(profiles.size());
     }
     return true;
 }
 
-bool j_profile_base::add_data(const QString &p_name, j_msgs_property_stats *p_data)
+bool j_profile_base::add_data(const QString &p_name, j_msgs_property_stats p_data)
 {
     j_profile* p = name_to_profile.value(p_name, nullptr);
     if (p)
         p->set_data(p_data);
     else
     {
-        if (!profiles)
-            return false;
-        else
-        {
-            j_profile* p_new = new j_profile(p_name, j_profile_type::created_user, p_data);
-            profiles->append(p_new);
-            name_to_profile.insert(p_name, p_new);
-        }
+        j_profile* p_new = new j_profile(p_name, j_profile_type::created_user, p_data);
+        profiles.push_back(p_new);
+        name_to_profile.insert(p_name, p_new);
+        Q_EMIT profile_count_changed(profiles.size());
     }
     return true;
 }
@@ -162,10 +184,14 @@ bool j_profile_base::delete_profile(const QString &p_name)
         return false;
     else
     {
-        qsizetype pos = profiles->indexOf(p);
-        profiles->remove(pos);
-        name_to_profile.remove(p->get_name());
-        delete(p);
+        auto it = std::remove_if(profiles.begin(), profiles.end(), [p] (j_profile* p_base) { return (p == p_base); });
+        if (it != profiles.end())
+        {
+            profiles.erase(it);
+            name_to_profile.remove(p->get_name());
+            delete(p);
+            Q_EMIT profile_count_changed(profiles.size());
+        }
     }
     return true;
 }
@@ -182,18 +208,23 @@ bool j_profile_base::delete_profile(j_profile *p)
     }
     else
     {
-        qsizetype pos = profiles->indexOf(p_base);
-        profiles->remove(pos);
-        name_to_profile.remove(p_base->get_name());
-        delete(p);
+        auto it = std::remove_if(profiles.begin(), profiles.end(), [p] (j_profile* p_base) { return (p == p_base); });
+        if (it != profiles.end())
+        {
+            profiles.erase(it);
+            name_to_profile.remove(p_base->get_name());
+            delete(p);
+            Q_EMIT profile_count_changed(profiles.size());
+        }
     }
     return true;
 }
 
 void j_profile_base::clear()
 {
-    foreach (auto *p, *profiles)
+    foreach (auto *p, profiles)
         delete(p);
-    profiles->clear();
+    profiles.clear();
     name_to_profile.clear();
+    Q_EMIT profile_count_changed(profiles.size());
 }

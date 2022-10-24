@@ -20,7 +20,7 @@ bool j_processor::is_busy() const
     return false;
 }
 
-const j_msgs_property_stats j_processor::stats() const
+const j_msgs_property_stats &j_processor::stats() const
 {
     return *text_stats;
 }
@@ -67,13 +67,13 @@ void j_processor::process_msgs()
     }
     if (!is_busy())
     {
-        emit stats_to_gui(*text_stats);
-        emit to_compare(std::move(*text_stats));
+        Q_EMIT stats_to_gui(*text_stats);
+        Q_EMIT to_compare(*text_stats);
         clear();
     }
 }
 
-void j_processor::add_stats(j_msgs_property_stats stats)
+void j_processor::add_stats(j_msgs_property_stats &stats)
 {
     text_stats->join(&stats, j_stats_join_t::Merge);
 }

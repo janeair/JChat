@@ -16,7 +16,7 @@ j_abstract_display::j_abstract_display(QString title, j_settings st, QWidget *pa
     tb = new action_toolbar("Actions", this);
     stngs = new j_settings_widget(st, this);
     fld = new QTextEdit(this);
-    connect(fld, &QTextEdit::textChanged, [this] () { emit field_text_changed(fld->toPlainText().length() > 0); });
+    connect(fld, &QTextEdit::textChanged, [this] () { Q_EMIT field_text_changed(fld->toPlainText().length() > 0); });
     QDockWidget* field = new QDockWidget("Field");
     field->setWidget(fld);
 
@@ -36,7 +36,7 @@ void j_abstract_display::import_to_field()
     QStringList text = io_dialog::open_text_content(this);
     foreach (auto string, text)
         fld->append(string);
-    emit log_this(j_log_action_t::IMPORT_DATA, windowTitle().toLower());
+    Q_EMIT log_this(j_log_action_t::IMPORT_DATA, "<" + windowTitle().toLower() + ">");
 }
 
 void j_abstract_display::export_from_field()
@@ -44,6 +44,6 @@ void j_abstract_display::export_from_field()
     if (io_dialog::save_text_content(this, fld->toPlainText()))
     {
         fld->clear();
-        emit log_this(j_log_action_t::EXPORT_DATA, windowTitle().toLower());
+        Q_EMIT log_this(j_log_action_t::EXPORT_DATA, "<" + windowTitle().toLower() + ">");
     }
 }

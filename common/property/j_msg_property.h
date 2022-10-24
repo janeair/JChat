@@ -47,10 +47,11 @@ private:
     uint32_t count = 0;
 };
 
-class j_simple_property : public j_abstract_property
+class j_simple_property final: public j_abstract_property
 {
 public:
     j_simple_property(j_property_id _id) : j_abstract_property(_id) {}
+    j_simple_property(const j_simple_property &another);
     ~j_simple_property() = default;
 
     virtual bool is_simple() override { return true; }

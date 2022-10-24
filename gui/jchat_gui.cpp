@@ -11,7 +11,6 @@
 #include "gui/common/j_action_toolbar.h"
 #include "gui/log/jchat_log.h"
 #include "gui/display/settings/j_settings.h"
-#include "gui/subwindow/j_profile_editor.h"
 #include "gui/subwindow/text_file_io_dialog.h"
 
 jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
@@ -30,8 +29,12 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
             (icon(j_toolbar_action_t::A_DELETE), "Clear history", log, &j_log_widget::clear, log, &j_log_widget::log_text_changed, false);
 
     connect(input, &j_input_display::to_configure, this, &jchat_gui::configure);
+
     connect(output, &j_output_display::log_this, log, &j_log_widget::log_message);
     connect(input, &j_input_display::log_this, log, &j_log_widget::log_message);
+    connect(editor->get_data_model(), &j_profile_editor_table_model::log_this, log, &j_log_widget::log_message);
+
+    connect(editor, &j_profile_editor::profile_to_display, output, &j_output_display::display_profile);
 
     setWindowIcon(QIcon(":/icons/resources/app_icon.ico"));
 
@@ -45,8 +48,8 @@ jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
 
 void jchat_gui::set_profile_base(j_profile_base *p_base)
 {
-    if (editor->get_data_model())
-        editor->get_data_model()->set_profile_base(p_base);
+    if (editor)
+        editor->set_profile_base(p_base);
 }
 
 void jchat_gui::configure(uint32_t msgs, j_settings st)
@@ -55,12 +58,12 @@ void jchat_gui::configure(uint32_t msgs, j_settings st)
     j_modules_t modules = static_cast<j_modules_t>(st.get_settings(j_settings_t::Modules));
     if (modules.testFlag(j_module_t::Linguist))
     {
-        emit to_configure_ling(msgs, static_cast<j_ling_types>(st.get_settings(j_settings_t::Lings)));
+        Q_EMIT to_configure_ling(msgs, static_cast<j_ling_types>(st.get_settings(j_settings_t::Lings)));
         if (modules.testFlag(j_module_t::Processor))
         {
-            emit to_configure_proc(msgs, static_cast<j_handlers>(st.get_settings(j_settings_t::Handlers)));
+            Q_EMIT to_configure_proc(msgs, static_cast<j_handlers>(st.get_settings(j_settings_t::Handlers)));
             if (modules.testFlag(j_module_t::Comparator))
-                emit to_configure_comp();
+                Q_EMIT to_configure_comp();
         }
     }
 }

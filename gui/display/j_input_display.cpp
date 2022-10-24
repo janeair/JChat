@@ -30,8 +30,8 @@ void j_input_display::process_input()
     QStringList msg_list = field()->toPlainText().split('\n', Qt::SkipEmptyParts);
     if (msg_list.count() > 0)
     {
-        emit to_configure(msg_list.size(), settings_widget()->settings());
+        Q_EMIT to_configure(msg_list.size(), settings_widget()->settings());
         foreach (QString msg, msg_list)
-            emit to_analyse(msg);
+            Q_EMIT to_analyse(msg);
     }
 }
