@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QLabel>
 
+#include "import/color_dialog_button.h"
 #include "gui/common/j_action_toolbar.h"
 #include "common/profile/j_profile.h"
 
@@ -115,6 +116,10 @@ bool j_profile_editor_table_model::setData(const QModelIndex &index, const QVari
             && names_can_be_editable)
         return false;
     auto new_name = value.toString();
+    if (new_name.isEmpty())
+        return false;
+    if (new_name.size() > name_size)
+        new_name = new_name.first(name_size);
     auto old_name = base->get_profile(index.row())->get_name();
     if (QString::compare(old_name, new_name, Qt::CaseInsensitive) == 0)
         return false;
@@ -159,12 +164,13 @@ bool j_profile_editor_table_model::delete_profile(const QString &p_name)
 
 void j_profile_editor_table_model::add_data(const QString &p_name, j_msgs_property_stats data)
 {
-    int row_p =base->index(p_name);
+    int row_p = base->index(p_name);
     if (row_p < 0)
     {
         int row = base->count();
+        auto new_name = p_name.first(name_size);
         beginInsertRows(QModelIndex(), row, row);
-        base->add_data(p_name, data);
+        base->add_data(new_name, data);
         endInsertRows();
         Q_EMIT dataChanged(index(row, 0), index(row, static_cast<int>(j_profile_editor_table_column_t::COUNT) - 1));
     }
@@ -214,10 +220,23 @@ j_profile_editor::j_profile_editor(QWidget* parent) : QMainWindow(parent)
             current_profile->setStyleSheet("color: black;");
         Q_EMIT selected_profile_changed(exist);
     });
-    QLabel* slc_p = new QLabel("Selected", this);
+    auto in_color_button = new color_dialog_button(Qt::black, this);
+    auto out_color_button = new color_dialog_button(Qt::red, this);
+    auto in_label = new QLabel("In", this);
+    in_label->setMinimumWidth(30);
+    in_label->setAlignment(Qt::AlignCenter);
+    in_label->setToolTip("Color if selected profile in base");
+    auto out_label = new QLabel("Out", this);
+    out_label->setMinimumWidth(30);
+    out_label->setAlignment(Qt::AlignCenter);
+    out_label->setToolTip("Color if selected profile out of base");
     QHBoxLayout* slc_group = new QHBoxLayout();
-    slc_group->addWidget(current_profile, 1);
-    slc_group->addWidget(slc_p, 2);
+    slc_group->addWidget(current_profile);
+    slc_group->addStretch(1);
+    slc_group->addWidget(in_label);
+    slc_group->addWidget(in_color_button);
+    slc_group->addWidget(out_label);
+    slc_group->addWidget(out_color_button);
 
     profile_table = new QTableView(this);
     table_model = new j_profile_editor_table_model();

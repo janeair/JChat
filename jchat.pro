@@ -25,6 +25,7 @@ SOURCES += \
     gui/log/jchat_log.cpp \
     gui/subwindow/j_profile_editor.cpp \
     gui/subwindow/text_file_io_dialog.cpp \
+    import/color_dialog_button.cpp \
     load/j_profile_loader.cpp \
     main.cpp \
     jchat.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     gui/subwindow/j_profile_editor.h \
     gui/subwindow/text_file_io_dialog.h \
     import/action_toolbar.h \
+    import/color_dialog_button.h \
     jchat.h \
     load/j_profile_loader.h \
     proc/handlers/j_general_word_handler.h \

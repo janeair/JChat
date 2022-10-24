@@ -50,6 +50,8 @@ private:
     j_profile_base* base = nullptr;
     bool names_can_be_editable = false;
 
+    const int name_size = 12;
+
     void set_profile_base(j_profile_base* p_base);
     j_profile_base* get_base() { return base; }
     const j_profile_base* get_base() const { return base; }
