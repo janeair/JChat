@@ -49,7 +49,6 @@ signals:
 private:
     j_profile_base* base = nullptr;
     bool names_can_be_editable = false;
-
     const int name_size = 12;
 
     void set_profile_base(j_profile_base* p_base);
@@ -97,6 +96,11 @@ private:
     /// data
     j_profile_editor_table_model* table_model   = nullptr;
     j_msgs_property_stats current_stats;
+    /// settings
+    QColor in_base_color = Qt::black;
+    QColor out_base_color = Qt::red;
+
+    void set_selected_profile_color(const QString &text);
 
 };
 

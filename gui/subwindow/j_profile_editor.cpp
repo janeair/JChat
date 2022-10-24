@@ -168,7 +168,7 @@ void j_profile_editor_table_model::add_data(const QString &p_name, j_msgs_proper
     if (row_p < 0)
     {
         int row = base->count();
-        auto new_name = p_name.first(name_size);
+        auto new_name = (p_name.size() > name_size) ? p_name.first(name_size) : p_name;
         beginInsertRows(QModelIndex(), row, row);
         base->add_data(new_name, data);
         endInsertRows();
@@ -206,22 +206,13 @@ j_profile_editor::j_profile_editor(QWidget* parent) : QMainWindow(parent)
              this, &j_profile_editor::delete_selected_profile, this, &j_profile_editor::selected_profile_changed, false);
 
     current_profile = new QLineEdit(this);
-    current_profile->setPlaceholderText("new profile");
+    //current_profile->setPlaceholderText("new profile");
     current_profile->setMinimumWidth(100);
     current_profile->setFixedHeight(25);
-    connect(current_profile, &QLineEdit::textChanged,
-            [this](const QString &p_name)
-    {
-        bool exist = table_model->is_profile_in_base(p_name);
-        bool highlighted = !current_profile->text().isEmpty() && !exist;
-        if (highlighted)
-            current_profile->setStyleSheet("color: red;");
-        else
-            current_profile->setStyleSheet("color: black;");
-        Q_EMIT selected_profile_changed(exist);
-    });
-    auto in_color_button = new color_dialog_button(Qt::black, this);
-    auto out_color_button = new color_dialog_button(Qt::red, this);
+    connect(current_profile, &QLineEdit::textChanged, this, &j_profile_editor::set_selected_profile_color);
+
+    auto in_color_button = new color_dialog_button(in_base_color, this);
+    auto out_color_button = new color_dialog_button(out_base_color, this);
     auto in_label = new QLabel("In", this);
     in_label->setMinimumWidth(30);
     in_label->setAlignment(Qt::AlignCenter);
@@ -230,6 +221,19 @@ j_profile_editor::j_profile_editor(QWidget* parent) : QMainWindow(parent)
     out_label->setMinimumWidth(30);
     out_label->setAlignment(Qt::AlignCenter);
     out_label->setToolTip("Color if selected profile out of base");
+    connect(in_color_button, &color_dialog_button::color_changed,
+            [this] (QColor color)
+    {
+        in_base_color = color;
+        set_selected_profile_color(current_profile->text());
+    });
+    connect(out_color_button, &color_dialog_button::color_changed,
+            [this] (QColor color)
+    {
+        out_base_color = color;
+        set_selected_profile_color(current_profile->text());
+    });
+
     QHBoxLayout* slc_group = new QHBoxLayout();
     slc_group->addWidget(current_profile);
     slc_group->addStretch(1);
@@ -276,7 +280,8 @@ void j_profile_editor::set_profile_base(j_profile_base *base)
 void j_profile_editor::delete_selected_profile()
 {
     bool deleted = table_model->delete_profile(current_profile->text());
-    current_profile->clear();
+    if (deleted)
+        current_profile->clear();
 }
 
 void j_profile_editor::open_selected_profile()
@@ -319,4 +324,23 @@ void j_profile_editor::clear_current_stats()
 void j_profile_editor::closeEvent(QCloseEvent* event)
 {
     event->accept();
+}
+
+void j_profile_editor::set_selected_profile_color(const QString &text)
+{
+    bool exist = table_model->is_profile_in_base(text);
+    bool highlighted = !current_profile->text().isEmpty() && !exist;
+    if (highlighted)
+    {
+        QPalette pal = current_profile->palette();
+        pal.setColor(QPalette::Text, out_base_color);
+        current_profile->setPalette(pal);
+    }
+    else
+    {
+        QPalette pal = current_profile->palette();
+        pal.setColor(QPalette::Text, in_base_color);
+        current_profile->setPalette(pal);
+    }
+    Q_EMIT selected_profile_changed(exist);
 }
