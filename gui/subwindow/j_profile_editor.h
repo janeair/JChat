@@ -30,7 +30,7 @@ class j_profile_editor_table_model : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    j_profile_editor_table_model(QObject* parent = nullptr);
+    j_profile_editor_table_model(const int max_name_size, QObject* parent = nullptr);
     int rowCount(const QModelIndex &) const override;
     int columnCount(const QModelIndex &) const override;
     QVariant data (const QModelIndex &index, int role) const override;
@@ -44,7 +44,8 @@ public:
     void add_data(const QString &p_name, j_msgs_property_stats data);
 
 signals:
-    void log_this(j_log_action_t t, QString decr);
+    void log_this(j_log_action_t t, const QString &decr);
+    void selected_profile_changed (const QString &p_name);
 
 private:
     j_profile_base* base = nullptr;
@@ -99,6 +100,7 @@ private:
     /// settings
     QColor in_base_color = Qt::black;
     QColor out_base_color = Qt::red;
+    const int max_profile_name_size = 12;
 
     void set_selected_profile_color(const QString &text);
 

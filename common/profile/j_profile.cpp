@@ -19,6 +19,23 @@ QString enum_to_string(j_profile_type t)
     }
 }
 
+QString enum_to_help_string(j_profile_type t) // tooltip role
+{
+    switch (t)
+    {
+    case j_profile_type::loaded_normal:
+        return QString("Loaded as usual");
+    case j_profile_type::loaded_error:
+        return QString("Loaded with error");
+    case j_profile_type::created_user:
+        return QString("Created by user");
+    case j_profile_type::created_default:
+        return QString("Created by default");
+    default:
+        return QString();
+    }
+}
+
 QColor enum_to_color(j_profile_type t)
 {
     switch (t)

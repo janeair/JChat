@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include <QTableView>
 #include <QHeaderView>
+#include <QItemSelectionModel>
 #include <QLineEdit>
 #include <QLabel>
 
@@ -30,9 +31,9 @@ QString enum_to_string(j_profile_editor_table_column_t t)
 
 ///######################################################################
 
-j_profile_editor_table_model::j_profile_editor_table_model(QObject* parent) : QAbstractTableModel(parent)
+j_profile_editor_table_model::j_profile_editor_table_model(const int max_name_size, QObject* parent)
+    : QAbstractTableModel(parent), name_size(max_name_size)
 {
-
 }
 
 int j_profile_editor_table_model::rowCount(const QModelIndex &) const
@@ -92,6 +93,12 @@ QVariant j_profile_editor_table_model::data(const QModelIndex &index, int role) 
                         QBrush(enum_to_color(base->get_profile(index.row())->get_type())) : QBrush(Qt::black);
         }
         break;
+        case Qt::ToolTipRole:
+        {
+            value = (index.column() == static_cast<int>(j_profile_editor_table_column_t::profile_type)) ?
+                        enum_to_help_string(base->get_profile(index.row())->get_type()) : QVariant();
+        }
+        break;
     }
     return value;
 }
@@ -132,8 +139,14 @@ bool j_profile_editor_table_model::setData(const QModelIndex &index, const QVari
 
 Qt::ItemFlags j_profile_editor_table_model::flags(const QModelIndex &index) const
 {
-    bool editable = (names_can_be_editable) && index.column() == static_cast<int>(j_profile_editor_table_column_t::profile_name);
-    return (editable) ? Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled: Qt::ItemIsEnabled;
+    switch (index.column())
+    {
+    case static_cast<int>(j_profile_editor_table_column_t::profile_name):
+        return (names_can_be_editable) ? Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled
+                                       : Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    default:
+        return Qt::ItemIsEnabled;
+    }
 }
 
 void j_profile_editor_table_model::set_names_editable(bool edit)
@@ -206,9 +219,10 @@ j_profile_editor::j_profile_editor(QWidget* parent) : QMainWindow(parent)
              this, &j_profile_editor::delete_selected_profile, this, &j_profile_editor::selected_profile_changed, false);
 
     current_profile = new QLineEdit(this);
-    //current_profile->setPlaceholderText("new profile");
+    current_profile->setPlaceholderText("new profile");
     current_profile->setMinimumWidth(100);
     current_profile->setFixedHeight(25);
+    current_profile->setMaxLength(max_profile_name_size);
     connect(current_profile, &QLineEdit::textChanged, this, &j_profile_editor::set_selected_profile_color);
 
     auto in_color_button = new color_dialog_button(in_base_color, this);
@@ -243,12 +257,25 @@ j_profile_editor::j_profile_editor(QWidget* parent) : QMainWindow(parent)
     slc_group->addWidget(out_color_button);
 
     profile_table = new QTableView(this);
-    table_model = new j_profile_editor_table_model();
+    table_model = new j_profile_editor_table_model(max_profile_name_size);
     profile_table->setModel(table_model);
     profile_table->horizontalHeader()->setStretchLastSection(true);
     profile_table->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     profile_table->setColumnWidth(static_cast<int>(j_profile_editor_table_column_t::profile_name), 100);
     profile_table->setColumnWidth(static_cast<int>(j_profile_editor_table_column_t::profile_type), 50);
+
+    QItemSelectionModel* slc_model = new QItemSelectionModel(table_model);
+    profile_table->setSelectionModel(slc_model);
+    connect(slc_model, &QItemSelectionModel::currentChanged, [this] (const QModelIndex &current, const QModelIndex &previous)
+    {
+        bool is_p_name = current.column() == static_cast<int>(j_profile_editor_table_column_t::profile_name);
+        if (is_p_name)
+        {
+            auto p_name = table_model->data(current, Qt::DisplayRole).toString();
+            if ((QString::compare(current_profile->text(), p_name, Qt::CaseInsensitive) != 0))
+                current_profile->setText(p_name);
+        }
+    });
 
     profiles_cc = new QLabel("Profiles: 0");
     profiles_cc->setAlignment(Qt::AlignRight);

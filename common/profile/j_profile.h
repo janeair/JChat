@@ -20,6 +20,7 @@ enum class j_profile_type
 };
 
 QString enum_to_string(j_profile_type t);
+QString enum_to_help_string(j_profile_type t);
 QColor enum_to_color(j_profile_type t);
 
 enum class j_profile_data_action
