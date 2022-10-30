@@ -9,13 +9,14 @@ class action_toolbar;
 class QTextEdit;
 
 enum class j_log_action_t;
+enum class j_display_type;
 
 class j_abstract_display : public QDockWidget
 {
     Q_OBJECT
 
 public:
-    explicit j_abstract_display(QString title, j_settings st, QWidget *parent = nullptr);
+    explicit j_abstract_display(j_display_type t, QWidget *parent = nullptr);
     ~j_abstract_display() = default;
 
     action_toolbar* toolbar() { return tb; }

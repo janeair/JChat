@@ -3,14 +3,14 @@
 #include "common/property/j_msg_property.h"
 #include "gui/common/j_action_toolbar.h"
 #include "gui/log/j_log_action.h"
-#include "gui/display/settings/j_settings.h"
+#include "gui/display/j_display_type.h"
+#include "gui/display/settings/j_settings_widget.h"
 
 #include <QTextEdit>
 
 j_output_display::j_output_display(QWidget* parent)
     : j_abstract_display(
-          QString("Output"),
-          j_settings(j_settings_t::Lings | j_settings_t::General | j_settings_t::Properties),
+         j_display_type::output,
           parent
           )
 {
@@ -29,9 +29,6 @@ j_output_display::j_output_display(QWidget* parent)
 
 void j_output_display::display_lings(QList<j_ling> lings)
 {
-    auto settings = static_cast<j_ling_types>(settings_widget()->settings().get_settings(j_settings_t::Lings));
-    if (settings.testFlag(j_ling_type::None))
-        return;
     for (QList<j_ling>::const_iterator i = lings.cbegin(); i != lings.cend(); i++)
     {
         QString line("> ");
@@ -45,25 +42,19 @@ void j_output_display::display_lings(QList<j_ling> lings)
         line += enum_to_string((*i).type);
         if ((*i).type == j_ling_type::Word)
             line += " " + enum_to_string((*i).lang);
-        if (settings.testFlag((*i).type))
-            field()->append(line);
     }
     field()->append("------------");
 }
 
 void j_output_display::display_general_stats(const j_msgs_general_stats &stats)
 {
-    auto settings = static_cast<j_msgs_general_stats_types>(settings_widget()->settings().get_settings(j_settings_t::General));
-    if (settings.testFlag(j_msgs_general_stats_t::None))
-        return;
     uint stats_count = enum_to_uint(j_msgs_general_stats_t::All);
     std::vector<uint32_t> stats_v = stats.statistics();
     assert(stats_v.size() == stats_count);
     field()->setTextColor(Qt::black);
     for (uint i = 0; i < stats_count; i++)
     {
-        if (settings.testFlag(uint_to_general_enum(i)))
-            field()->append("> " + enum_to_string(uint_to_general_enum(i))
+        field()->append("> " + enum_to_string(uint_to_general_enum(i))
                        + ": " + QString::number(stats_v[i]));
     }
     field()->append("------------");
@@ -71,15 +62,10 @@ void j_output_display::display_general_stats(const j_msgs_general_stats &stats)
 
 void j_output_display::display_property_stats(const j_msgs_property_stats &stats)
 {
-    auto settings = static_cast<j_property_ids>(settings_widget()->settings().get_settings(j_settings_t::Properties));
-    if (settings.testFlag(j_property_id::NONE))
-        return;
     auto prop_list = stats.list();
     field()->setTextColor(Qt::darkBlue);
     foreach (j_abstract_property* t, prop_list)
     {
-        if (settings.testFlag(t->id_enum()))
-        {
             if (t->is_simple()) /// simple property parsing
             {
                 j_simple_property* s_prop = static_cast<j_simple_property*>(t);
@@ -90,7 +76,6 @@ void j_output_display::display_property_stats(const j_msgs_property_stats &stats
             {
 
             }
-        }
     }
     field()->setTextColor(Qt::black);
     field()->append("------------");

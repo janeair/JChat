@@ -55,3 +55,24 @@ j_ling_char_t j_ling::can_be_multiple_char(j_ling_type t)
         return j_ling_char_t::Single;
     }
 }
+
+QColor enum_to_default_color(j_ling_type t)
+{
+    switch (t)
+    {
+    case j_ling_type::Word:
+        return Qt::black;
+    case j_ling_type::Symbol:
+        return Qt::blue;
+    case j_ling_type::Sign:
+        return Qt::darkBlue;
+    case j_ling_type::Number:
+        return Qt::darkGreen;
+    case j_ling_type::Separator:
+        return Qt::darkRed;
+    case j_ling_type::ND:
+        return Qt::gray;
+    default:
+        return QColor();
+    }
+}

@@ -1,6 +1,7 @@
 #include "j_abstract_display.h"
 
-#include "gui/display/settings/j_settings.h"
+#include "gui/display/settings/j_settings_widget.h"
+#include "gui/display/j_display_type.h"
 #include "gui/subwindow/text_file_io_dialog.h"
 #include "gui/log/j_log_action.h"
 #include "import/action_toolbar.h"
@@ -10,11 +11,11 @@
 #include <QMainWindow>
 #include <QTextEdit>
 
-j_abstract_display::j_abstract_display(QString title, j_settings st, QWidget *parent)
+j_abstract_display::j_abstract_display(j_display_type t, QWidget *parent)
     : QDockWidget(parent)
 {
     tb = new action_toolbar("Actions", this);
-    stngs = new j_settings_widget(st, this);
+    stngs = new j_settings_widget(t);
     fld = new QTextEdit(this);
     connect(fld, &QTextEdit::textChanged, [this] () { Q_EMIT field_text_changed(fld->toPlainText().length() > 0); });
     QDockWidget* field = new QDockWidget("Field");
@@ -27,7 +28,7 @@ j_abstract_display::j_abstract_display(QString title, j_settings st, QWidget *pa
     w->addDockWidget(Qt::RightDockWidgetArea, field);
     setWidget(w);
 
-    setWindowTitle(title);
+    setWindowTitle(enum_to_string(t));
 }
 
 void j_abstract_display::import_to_field()

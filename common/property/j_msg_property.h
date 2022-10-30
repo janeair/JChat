@@ -6,16 +6,13 @@
 
 enum class j_property_id
 {
-    NONE = 0x0,
-    WORDS_IN_MESSAGE = 0x1,
-    SYMBOLS_IN_WORD = 0x2,
-    ALL = 0x3,
+    WORDS_IN_MESSAGE,
+    SYMBOLS_IN_WORD,
+
+    COUNT
 };
 
 const QString enum_to_string(j_property_id id);
-
-Q_DECLARE_FLAGS(j_property_ids, j_property_id);
-Q_DECLARE_OPERATORS_FOR_FLAGS(j_property_ids);
 
 class j_abstract_property
 {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QString>
+#include <QColor>
 
 enum class j_ling_type
 {
@@ -15,6 +16,7 @@ enum class j_ling_type
 };
 
 const QString enum_to_string(j_ling_type t);
+QColor enum_to_default_color(j_ling_type t);
 
 enum class j_lang
 {

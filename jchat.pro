@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     common/j_module_t.cpp \
+    common/j_stats_t.cpp \
     common/ling/j_ling.cpp \
     common/profile/j_profile.cpp \
     common/property/j_msg_property.cpp \
@@ -17,9 +18,11 @@ SOURCES += \
     common/stats/j_msgs_property_stats.cpp \
     gui/common/j_action_toolbar.cpp \
     gui/display/j_abstract_display.cpp \
+    gui/display/j_display_type.cpp \
     gui/display/j_input_display.cpp \
     gui/display/j_output_display.cpp \
     gui/display/settings/j_settings.cpp \
+    gui/display/settings/j_settings_widget.cpp \
     gui/jchat_gui.cpp \
     gui/log/j_log_action.cpp \
     gui/log/jchat_log.cpp \
@@ -37,6 +40,7 @@ SOURCES += \
 
 HEADERS += \
     common/j_module_t.h \
+    common/j_stats_t.h \
     common/ling/j_ling.h \
     common/profile/j_profile.h \
     common/property/j_msg_property.h \
@@ -45,9 +49,11 @@ HEADERS += \
     common/stats/j_msgs_property_stats.h \
     gui/common/j_action_toolbar.h \
     gui/display/j_abstract_display.h \
+    gui/display/j_display_type.h \
     gui/display/j_input_display.h \
     gui/display/j_output_display.h \
     gui/display/settings/j_settings.h \
+    gui/display/settings/j_settings_widget.h \
     gui/jchat_gui.h \
     gui/log/j_log_action.h \
     gui/log/jchat_log.h \

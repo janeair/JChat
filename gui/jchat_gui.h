@@ -31,7 +31,7 @@ signals:
     void to_configure_comp();
 
 public slots:
-    void configure(uint32_t msgs, j_settings st);
+    void configure(uint32_t msgs);
     void export_from_log();
     void show_editor();
 

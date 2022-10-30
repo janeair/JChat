@@ -1,13 +1,13 @@
 #include "gui/display/j_input_display.h"
 
+#include "gui/display/j_display_type.h"
 #include "gui/common/j_action_toolbar.h"
 
 #include <QTextEdit>
 
 j_input_display::j_input_display(QWidget* parent)
     : j_abstract_display(
-          QString("Input"),
-          j_settings(j_settings_t::Lings | j_settings_t::Modules | j_settings_t::Handlers),
+          j_display_type::input,
           parent
           )
 {
@@ -30,7 +30,7 @@ void j_input_display::process_input()
     QStringList msg_list = field()->toPlainText().split('\n', Qt::SkipEmptyParts);
     if (msg_list.count() > 0)
     {
-        Q_EMIT to_configure(msg_list.size(), settings_widget()->settings());
+        Q_EMIT to_configure(msg_list.size());
         foreach (QString msg, msg_list)
             Q_EMIT to_analyse(msg);
     }

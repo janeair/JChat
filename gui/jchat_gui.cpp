@@ -52,20 +52,12 @@ void jchat_gui::set_profile_base(j_profile_base *p_base)
         editor->set_profile_base(p_base);
 }
 
-void jchat_gui::configure(uint32_t msgs, j_settings st)
+void jchat_gui::configure(uint32_t msgs)
 {
     get_output()->field()->clear();
-    j_modules_t modules = static_cast<j_modules_t>(st.get_settings(j_settings_t::Modules));
-    if (modules.testFlag(j_module_t::Linguist))
-    {
-        Q_EMIT to_configure_ling(msgs, static_cast<j_ling_types>(st.get_settings(j_settings_t::Lings)));
-        if (modules.testFlag(j_module_t::Processor))
-        {
-            Q_EMIT to_configure_proc(msgs, static_cast<j_handlers>(st.get_settings(j_settings_t::Handlers)));
-            if (modules.testFlag(j_module_t::Comparator))
-                Q_EMIT to_configure_comp();
-        }
-    }
+        Q_EMIT to_configure_ling(msgs, j_ling_type::All);
+        Q_EMIT to_configure_proc(msgs, j_handler_id::AllHandlers);
+        Q_EMIT to_configure_comp();
 }
 
 void jchat_gui::export_from_log()
