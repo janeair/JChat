@@ -2,7 +2,8 @@
 #define J_INPUT_DISPLAY_H
 
 #include "gui/display/j_abstract_display.h"
-#include "gui/display/settings/j_settings_widget.h"
+#include "common/ling/j_ling.h"
+#include "proc/handlers/j_ling_abstract_handler.h"
 
 class j_input_display : public j_abstract_display
 {
@@ -10,6 +11,9 @@ class j_input_display : public j_abstract_display
 
 public:
     j_input_display(QWidget* parent = nullptr);
+    j_ling_types get_ling_settings() const;
+    j_handlers get_proc_settings() const;
+    bool get_comp_settings() const;
 
 signals:
     void to_configure(uint32_t msgs);

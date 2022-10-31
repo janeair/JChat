@@ -1,7 +1,9 @@
 #ifndef J_OUTPUT_DISPLAY_H
 #define J_OUTPUT_DISPLAY_H
 
+#include "common/j_compare_res_t.h"
 #include "common/ling/j_ling.h"
+#include "common/property/j_msg_property.h"
 #include "common/stats/j_msgs_general_stats.h"
 #include "common/stats/j_msgs_property_stats.h"
 #include "gui/display/j_abstract_display.h"
@@ -19,6 +21,9 @@ class j_output_display : public j_abstract_display
 
 public:
     j_output_display(QWidget* parent = nullptr);
+    bool get_general_settings() const;
+    QList<j_property_id> get_property_settings() const;
+    QList<j_compare_res_t> get_compare_settings() const;
 
 signals:
 

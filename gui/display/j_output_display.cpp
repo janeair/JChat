@@ -4,7 +4,6 @@
 #include "gui/common/j_action_toolbar.h"
 #include "gui/log/j_log_action.h"
 #include "gui/display/j_display_type.h"
-#include "gui/display/settings/j_settings_widget.h"
 
 #include <QTextEdit>
 
@@ -15,8 +14,8 @@ j_output_display::j_output_display(QWidget* parent)
           )
 {
     /// configure toolbar
-    toolbar()->add_action<j_settings_widget>
-            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings_widget(), &j_settings_widget::setVisible);
+    toolbar()->add_action<settings_widget>
+            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &settings_widget::setVisible);
     toolbar()->add_action<j_output_display, j_output_display>
             (icon(j_toolbar_action_t::A_EXPORT), "Export to text file", this, &j_output_display::export_from_field, this, &j_output_display::field_text_changed, false);
     toolbar()->add_action<QTextEdit, j_output_display>
@@ -25,6 +24,35 @@ j_output_display::j_output_display(QWidget* parent)
     /// configure field
     field()->setReadOnly(true);
     field()->setAlignment(Qt::AlignLeft);
+}
+
+bool j_output_display::get_general_settings() const
+{
+    return true;
+}
+
+QList<j_property_id> j_output_display::get_property_settings() const
+{
+    QList<j_property_id> list;
+    int count = static_cast<int>(j_property_id::COUNT);
+    for (int i = 0; i < count; i++)
+    {
+        j_property_id id = static_cast<j_property_id>(i);
+        list.append(id);
+    }
+    return list;
+}
+
+QList<j_compare_res_t> j_output_display::get_compare_settings() const
+{
+    QList<j_compare_res_t> list;
+    int count = static_cast<int>(j_compare_res_t::COUNT);
+    for (int i = 0; i < count; i++)
+    {
+        j_compare_res_t res = static_cast<j_compare_res_t>(i);
+        list.append(res);
+    }
+    return list;
 }
 
 void j_output_display::display_lings(QList<j_ling> lings)

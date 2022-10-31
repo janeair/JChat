@@ -12,8 +12,8 @@ j_input_display::j_input_display(QWidget* parent)
           )
 {
     /// configure toolbar
-    toolbar()->add_action<j_settings_widget>
-            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings_widget(), &j_settings_widget::setVisible);
+    toolbar()->add_action<settings_widget>
+            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &settings_widget::setVisible);
     toolbar()->add_action<j_input_display>
             (icon(j_toolbar_action_t::A_IMPORT), "Import from text file", this, &j_input_display::import_to_field);
     toolbar()->add_action<j_input_display, j_input_display>
@@ -23,6 +23,21 @@ j_input_display::j_input_display(QWidget* parent)
 
     /// configure field
     field()->setAlignment(Qt::AlignLeft);
+}
+
+j_ling_types j_input_display::get_ling_settings() const
+{
+    return j_ling_type::All;
+}
+
+j_handlers j_input_display::get_proc_settings() const
+{
+    return j_handler_id::AllHandlers;
+}
+
+bool j_input_display::get_comp_settings() const
+{
+    return true;
 }
 
 void j_input_display::process_input()

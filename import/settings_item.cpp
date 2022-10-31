@@ -1,4 +1,4 @@
-#include "gui/display/settings/j_settings.h"
+#include "import/settings_item.h"
 
 settings_item::settings_item(settings_item *_parent, const QString &name, QColor _color, bool default_checked)
 {
@@ -43,6 +43,11 @@ void settings_item::set_checkstate(bool _state)
         child->set_checkstate(_state);
     if (parent)
         parent->update_checkstate();
+}
+
+void settings_item::set_color(const QColor &_color)
+{
+    color = _color;
 }
 
 void settings_item::update_checkstate() const

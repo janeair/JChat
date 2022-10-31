@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    common/j_compare_res_t.cpp \
     common/j_module_t.cpp \
     common/j_stats_t.cpp \
     common/ling/j_ling.cpp \
@@ -21,14 +22,14 @@ SOURCES += \
     gui/display/j_display_type.cpp \
     gui/display/j_input_display.cpp \
     gui/display/j_output_display.cpp \
-    gui/display/settings/j_settings.cpp \
-    gui/display/settings/j_settings_widget.cpp \
     gui/jchat_gui.cpp \
     gui/log/j_log_action.cpp \
     gui/log/jchat_log.cpp \
     gui/subwindow/j_profile_editor.cpp \
     gui/subwindow/text_file_io_dialog.cpp \
     import/color_dialog_button.cpp \
+    import/settings_item.cpp \
+    import/settings_widget.cpp \
     load/j_profile_loader.cpp \
     main.cpp \
     jchat.cpp \
@@ -39,6 +40,7 @@ SOURCES += \
     proc/j_processor.cpp
 
 HEADERS += \
+    common/j_compare_res_t.h \
     common/j_module_t.h \
     common/j_stats_t.h \
     common/ling/j_ling.h \
@@ -52,8 +54,6 @@ HEADERS += \
     gui/display/j_display_type.h \
     gui/display/j_input_display.h \
     gui/display/j_output_display.h \
-    gui/display/settings/j_settings.h \
-    gui/display/settings/j_settings_widget.h \
     gui/jchat_gui.h \
     gui/log/j_log_action.h \
     gui/log/jchat_log.h \
@@ -61,6 +61,8 @@ HEADERS += \
     gui/subwindow/text_file_io_dialog.h \
     import/action_toolbar.h \
     import/color_dialog_button.h \
+    import/settings_item.h \
+    import/settings_widget.h \
     jchat.h \
     load/j_profile_loader.h \
     proc/handlers/j_general_word_handler.h \

@@ -7,7 +7,6 @@
 #include "gui/display/j_input_display.h"
 #include "gui/display/j_output_display.h"
 #include "gui/subwindow/j_profile_editor.h"
-#include "gui/display/settings/j_settings.h"
 
 class j_log_widget;
 class j_profile_base;

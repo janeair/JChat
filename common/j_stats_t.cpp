@@ -24,7 +24,7 @@ QColor enum_to_default_color(j_stats_t t)
     case j_stats_t::property:
         return Qt::darkBlue;
     case j_stats_t::compare:
-        return Qt::darkGreen;
+        return QColor();
     default:
         return QColor();
     }

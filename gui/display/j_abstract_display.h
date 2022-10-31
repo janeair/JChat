@@ -1,15 +1,22 @@
 #ifndef J_ABSTRACT_DISPLAY_H
 #define J_ABSTRACT_DISPLAY_H
 
+#include "import/settings_widget.h"
 #include <QDockWidget>
 
-class j_settings;
-class j_settings_widget;
+using namespace tree_settings;
+
 class action_toolbar;
 class QTextEdit;
 
 enum class j_log_action_t;
 enum class j_display_type;
+
+class j_settings_model : public settings_tree_model
+{
+public:
+    j_settings_model(j_display_type t, QWidget* parent = nullptr);
+};
 
 class j_abstract_display : public QDockWidget
 {
@@ -20,7 +27,7 @@ public:
     ~j_abstract_display() = default;
 
     action_toolbar* toolbar() { return tb; }
-    j_settings_widget* settings_widget() { return stngs; }
+    settings_widget* settings() { return stngs; }
     QTextEdit* field() { return fld; }
 
 public slots:
@@ -32,9 +39,9 @@ signals:
     void log_this(j_log_action_t t, QString decr);
 
 private:
-    action_toolbar* tb = nullptr;
-    j_settings_widget* stngs = nullptr;
-    QTextEdit* fld = nullptr;
+    action_toolbar *tb = nullptr;
+    settings_widget *stngs = nullptr;
+    QTextEdit *fld = nullptr;
 };
 
 #endif // J_ABSTRACT_DISPLAY_H

@@ -6,11 +6,8 @@
 #include <QHBoxLayout>
 #include <QDockWidget>
 
-#include <QDebug>
-
 #include "gui/common/j_action_toolbar.h"
 #include "gui/log/jchat_log.h"
-#include "gui/display/settings/j_settings.h"
 #include "gui/subwindow/text_file_io_dialog.h"
 
 jchat_gui::jchat_gui(QWidget *parent) : QMainWindow(parent)
@@ -55,8 +52,10 @@ void jchat_gui::set_profile_base(j_profile_base *p_base)
 void jchat_gui::configure(uint32_t msgs)
 {
     get_output()->field()->clear();
-        Q_EMIT to_configure_ling(msgs, j_ling_type::All);
-        Q_EMIT to_configure_proc(msgs, j_handler_id::AllHandlers);
+
+    Q_EMIT to_configure_ling(msgs, input->get_ling_settings());
+    Q_EMIT to_configure_proc(msgs, input->get_proc_settings());
+    if (input->get_comp_settings())
         Q_EMIT to_configure_comp();
 }
 
