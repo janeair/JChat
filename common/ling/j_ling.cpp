@@ -76,3 +76,24 @@ QColor enum_to_default_color(j_ling_type t)
         return QColor();
     }
 }
+
+j_ling_type ling_type_from_int(int n)
+{
+    switch (n)
+    {
+    case 0:
+        return j_ling_type::Word;
+    case 1:
+        return j_ling_type::Symbol;
+    case 2:
+        return j_ling_type::Sign;
+    case 3:
+        return j_ling_type::Number;
+    case 4:
+        return j_ling_type::Separator;
+    case 5:
+        return j_ling_type::ND;
+    default:
+        return j_ling_type::None;
+    }
+}

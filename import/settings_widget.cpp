@@ -117,20 +117,9 @@ QVariant tree_settings::settings_tree_model::headerData(int section, Qt::Orienta
     return QVariant();
 }
 
-const QList<settings_item *> tree_settings::settings_tree_model::get_section(int index) const
+const settings_item *tree_settings::settings_tree_model::top_level_item(int index) const
 {
-    QList<settings_item *> list;
-    if (index >= 0 && index < root->child_count())
-        list = root->child_at(index)->get_childs();
-    return list;
-}
-
-bool tree_settings::settings_tree_model::is_section_checked(int index) const
-{
-    bool res = false;
-    if (index >= 0 && index < root->child_count())
-        res = root->child_at(index)->is_checked();
-    return res;
+    return root->child_at(index);
 }
 
 void tree_settings::settings_tree_model::change_highlight_color(const QModelIndex &index)

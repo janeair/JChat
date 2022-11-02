@@ -31,8 +31,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    const QList<settings_item*> get_section(int index) const;
-    bool is_section_checked(int index) const;
+    const settings_item* top_level_item(int index) const;
 
 protected:
     settings_item* get_root() { return root; }

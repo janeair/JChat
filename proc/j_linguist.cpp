@@ -9,6 +9,8 @@ j_linguist::j_linguist(QObject *parent) : QObject(parent)
 
 void j_linguist::configure_settings(uint32_t msgs, j_ling_types t)
 {
+    if (t.testFlag(j_ling_type::None))
+        return;
     qDebug() << "linguist: configure settings" << msgs << t;
     assert(msgs > 0);
     msgs_to_proc = msgs;
@@ -109,7 +111,7 @@ void j_linguist::process_msg(QString text)
     msgs_ready++;
     if (!is_busy())
     {
-        Q_EMIT lings_to_gui(std::move(ling_list));
+        Q_EMIT lings_to_gui(ling_list);
         Q_EMIT stats_to_gui(std::move(*ling_stats));
         clear();
     }

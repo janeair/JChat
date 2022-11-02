@@ -24,7 +24,6 @@ public:
     void set_profile_base(j_profile_base* p_base);
 
 signals:
-    void to_analyse(const QString& msg);
     void to_configure_proc(uint32_t msgs, j_handlers ids);
     void to_configure_ling(uint32_t msgs, j_ling_types types);
     void to_configure_comp();

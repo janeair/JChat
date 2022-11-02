@@ -12,6 +12,7 @@ public:
     void add_child(settings_item *_child);
 
     settings_item *child_at(int row);
+    const settings_item *child_at(int row) const;
     settings_item *get_parent() { return parent; };
     const QList<settings_item*> get_childs() const { return childs; }
     int child_count() const;

@@ -100,6 +100,8 @@ j_settings_model::j_settings_model(j_display_type t, QWidget *parent)
                 }
             }
             break;
+            default:
+            break;
             }
             root->add_child(top_item);
         }
@@ -130,6 +132,11 @@ j_abstract_display::j_abstract_display(j_display_type t, QWidget *parent)
     setWindowTitle(enum_to_string(t));
 }
 
+void j_abstract_display::clear_field()
+{
+    fld->clear();
+}
+
 void j_abstract_display::import_to_field()
 {
     fld->clear();
@@ -137,6 +144,26 @@ void j_abstract_display::import_to_field()
     foreach (auto string, text)
         fld->append(string);
     Q_EMIT log_this(j_log_action_t::IMPORT_DATA, "<" + windowTitle().toLower() + ">");
+}
+
+void j_abstract_display::add_string(const QString &text, const QColor &color)
+{
+    auto _color = color.isValid() ? color : Qt::black;
+    field()->setTextColor(_color);
+    field()->append(text);
+}
+
+void j_abstract_display::add_tab_string(const QString &text, const QColor &color)
+{
+    auto _color = color.isValid() ? color : Qt::black;
+    field()->setTextColor(_color);
+    field()->append("    " + text);
+}
+
+void j_abstract_display::add_empty_string()
+{
+    field()->setTextColor(Qt::black);
+    field()->append("");
 }
 
 void j_abstract_display::export_from_field()

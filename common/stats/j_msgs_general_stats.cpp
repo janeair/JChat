@@ -28,7 +28,7 @@ void j_msgs_general_stats::set_data(j_msgs_general_stats_t stat, uint32_t value)
         return;
     uint32_t stat_t = enum_to_uint(stat);
     assert(stat_t < stats.size());
-    stats[stat_t - 1] = value;
+    stats[stat_t] = value;
 }
 
 void j_msgs_general_stats::add_data(j_msgs_general_stats_t stat, uint32_t value)
@@ -36,8 +36,8 @@ void j_msgs_general_stats::add_data(j_msgs_general_stats_t stat, uint32_t value)
     if (stat == j_msgs_general_stats_t::None || stat == j_msgs_general_stats_t::All)
         return;
     uint32_t stat_t = enum_to_uint(stat);
-    assert(stat_t - 1 < stats.size());
-    stats[stat_t - 1] += value;
+    assert(stat_t < stats.size());
+    stats[stat_t] += value;
 }
 
 uint32_t j_msgs_general_stats::hash() const
@@ -100,26 +100,26 @@ j_msgs_general_stats_t j_msgs_general_stats::from_ling_t(j_ling_type t)
     }
 }
 
-uint32_t enum_to_uint(j_msgs_general_stats_t t)
+int32_t enum_to_uint(j_msgs_general_stats_t t)
 {
     switch (t)
     {
     case j_msgs_general_stats_t::Messages:
-        return 1;
-    case j_msgs_general_stats_t::Lings:
-        return 2;
-    case j_msgs_general_stats_t::Words:
-        return 3;
-    case j_msgs_general_stats_t::Symbols:
-        return 4;
-    case j_msgs_general_stats_t::Signs:
-        return 5;
-    case j_msgs_general_stats_t::Numbers:
-        return 6;
-    case j_msgs_general_stats_t::All:
-        return 7;
-    default:
         return 0;
+    case j_msgs_general_stats_t::Lings:
+        return 1;
+    case j_msgs_general_stats_t::Words:
+        return 2;
+    case j_msgs_general_stats_t::Symbols:
+        return 3;
+    case j_msgs_general_stats_t::Signs:
+        return 4;
+    case j_msgs_general_stats_t::Numbers:
+        return 5;
+    case j_msgs_general_stats_t::All:
+        return 6;
+    default:
+        return -1;
     }
 }
 

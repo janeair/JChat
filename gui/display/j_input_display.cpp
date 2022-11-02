@@ -2,6 +2,7 @@
 
 #include "gui/display/j_display_type.h"
 #include "gui/common/j_action_toolbar.h"
+#include "common/j_module_t.h"
 
 #include <QTextEdit>
 
@@ -27,17 +28,52 @@ j_input_display::j_input_display(QWidget* parent)
 
 j_ling_types j_input_display::get_ling_settings() const
 {
-    return j_ling_type::All;
+    j_ling_types res = j_ling_type::None;
+    int section = static_cast<int>(j_module_t::Linguist);
+    const auto model = settings()->get_model();
+    const auto top_item = model->top_level_item(section);
+    bool is_checked = top_item->is_checked();
+    if (!is_checked)
+        return res;
+    auto list = top_item->get_childs();
+    foreach (auto item, list)
+        if (item->is_checked())
+            res |= ling_type_from_int(item->row());
+    return res;
 }
 
 j_handlers j_input_display::get_proc_settings() const
 {
-    return j_handler_id::AllHandlers;
+    j_handlers res = j_handler_id::NoHandler;
+    int section = static_cast<int>(j_module_t::Processor);
+    const auto model = settings()->get_model();
+    const auto top_item = model->top_level_item(section);
+    bool is_checked = top_item->is_checked()
+            && model->top_level_item(static_cast<int>(j_module_t::Linguist))->is_checked();
+    if (!is_checked)
+        return res;
+    auto list = top_item->get_childs();
+    foreach (auto item, list)
+        if (item->is_checked())
+            res |= handler_id_from_int(item->row());
+    return res;
 }
 
 bool j_input_display::get_comp_settings() const
 {
-    return true;
+    int section = static_cast<int>(j_module_t::Comparator);
+    const auto model = settings()->get_model();
+    const auto top_item = model->top_level_item(section);
+    bool is_checked = top_item->is_checked()
+            && model->top_level_item(static_cast<int>(j_module_t::Linguist))->is_checked()
+            && model->top_level_item(static_cast<int>(j_module_t::Processor))->is_checked();
+    return is_checked;
+}
+
+const settings_item *j_input_display::get_ling_settings_data() const
+{
+    int section = static_cast<int>(j_module_t::Linguist);
+    return settings()->get_model()->top_level_item(section);
 }
 
 void j_input_display::process_input()

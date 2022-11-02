@@ -16,7 +16,7 @@ enum class j_msgs_general_stats_t
 };
 
 const QString enum_to_string(j_msgs_general_stats_t t);
-uint32_t enum_to_uint(j_msgs_general_stats_t t);
+int32_t enum_to_uint(j_msgs_general_stats_t t);
 j_msgs_general_stats_t uint_to_general_enum(uint32_t t);
 
 Q_DECLARE_FLAGS(j_msgs_general_stats_types, j_msgs_general_stats_t);

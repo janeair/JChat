@@ -14,6 +14,7 @@ public:
     j_ling_types get_ling_settings() const;
     j_handlers get_proc_settings() const;
     bool get_comp_settings() const;
+    const settings_item* get_ling_settings_data() const;
 
 signals:
     void to_configure(uint32_t msgs);

@@ -1,6 +1,7 @@
 #include "j_output_display.h"
 
 #include "common/property/j_msg_property.h"
+#include "common/j_stats_t.h"
 #include "gui/common/j_action_toolbar.h"
 #include "gui/log/j_log_action.h"
 #include "gui/display/j_display_type.h"
@@ -26,106 +27,81 @@ j_output_display::j_output_display(QWidget* parent)
     field()->setAlignment(Qt::AlignLeft);
 }
 
-bool j_output_display::get_general_settings() const
+QPair<bool, QColor> j_output_display::get_general_settings() const
 {
-    return true;
+    int section = static_cast<int>(j_stats_t::general);
+    const auto model = settings()->get_model();
+    auto item = model->top_level_item(section);
+    return QPair<bool, QColor>(item->is_checked(), item->get_color());
 }
 
-QList<j_property_id> j_output_display::get_property_settings() const
+const settings_item* j_output_display::get_property_settings_data() const
 {
-    QList<j_property_id> list;
-    int count = static_cast<int>(j_property_id::COUNT);
-    for (int i = 0; i < count; i++)
-    {
-        j_property_id id = static_cast<j_property_id>(i);
-        list.append(id);
-    }
-    return list;
+    int section = static_cast<int>(j_stats_t::property);
+    return settings()->get_model()->top_level_item(section);
 }
 
-QList<j_compare_res_t> j_output_display::get_compare_settings() const
+const settings_item* j_output_display::get_compare_settings_data() const
 {
-    QList<j_compare_res_t> list;
-    int count = static_cast<int>(j_compare_res_t::COUNT);
-    for (int i = 0; i < count; i++)
-    {
-        j_compare_res_t res = static_cast<j_compare_res_t>(i);
-        list.append(res);
-    }
-    return list;
-}
-
-void j_output_display::display_lings(QList<j_ling> lings)
-{
-    for (QList<j_ling>::const_iterator i = lings.cbegin(); i != lings.cend(); i++)
-    {
-        QString line("> ");
-        if ((*i).type != j_ling_type::Separator && (*i).type != j_ling_type::ND)
-        {
-            field()->setTextColor(Qt::black);
-            line += (*i).str + " ";
-        }
-        else
-            field()->setTextColor(Qt::red);
-        line += enum_to_string((*i).type);
-        if ((*i).type == j_ling_type::Word)
-            line += " " + enum_to_string((*i).lang);
-    }
-    field()->append("------------");
+    int section = static_cast<int>(j_stats_t::compare);
+    return settings()->get_model()->top_level_item(section);
 }
 
 void j_output_display::display_general_stats(const j_msgs_general_stats &stats)
 {
+    auto settings = get_general_settings();
+    if (!settings.first)
+        return;
     uint stats_count = enum_to_uint(j_msgs_general_stats_t::All);
     std::vector<uint32_t> stats_v = stats.statistics();
-    assert(stats_v.size() == stats_count);
-    field()->setTextColor(Qt::black);
+    add_string(enum_to_full_string(j_stats_t::general), settings.second);
     for (uint i = 0; i < stats_count; i++)
-    {
-        field()->append("> " + enum_to_string(uint_to_general_enum(i))
-                       + ": " + QString::number(stats_v[i]));
-    }
-    field()->append("------------");
+        add_tab_string(enum_to_string(uint_to_general_enum(i)) + ": " + QString::number(stats_v[i]), Qt::black);
+    add_empty_string();
 }
 
 void j_output_display::display_property_stats(const j_msgs_property_stats &stats)
 {
+    auto st_data = get_property_settings_data();
     auto prop_list = stats.list();
-    field()->setTextColor(Qt::darkBlue);
-    foreach (j_abstract_property* t, prop_list)
+    if (!st_data->is_checked() || prop_list.isEmpty())
+        return;
+    add_string(enum_to_full_string(j_stats_t::property), st_data->get_color());
+    foreach (auto t, prop_list)
     {
-            if (t->is_simple()) /// simple property parsing
-            {
-                j_simple_property* s_prop = static_cast<j_simple_property*>(t);
-                field()->append("> " + enum_to_string(s_prop->id_enum()) + " : "
-                        + QString::number(s_prop->data(), 'g', 3) + " | weight: " + QString::number(s_prop->weight()));
-            }
-            else                /// complex property parsing
-            {
-
-            }
+        int id = t->id_int();
+        auto item = st_data->child_at(id);
+        if (item->is_checked())
+        {
+            j_simple_property* s_prop = static_cast<j_simple_property*>(t);
+            add_tab_string(enum_to_string(s_prop->id_enum()) + " : " + QString::number(s_prop->data(), 'g', 3)
+                            + " | weight: " + QString::number(s_prop->weight()), item->get_color());
+        }
     }
-    field()->setTextColor(Qt::black);
-    field()->append("------------");
+    add_empty_string();
 }
 
 void j_output_display::display_profile(const j_profile *p)
 {
-    field()->clear();
-    field()->setTextColor(Qt::black);
-    field()->append(p->get_name() + ":");
+    clear_field();
+    add_string(p->get_name() + ":", Qt::black);
     display_property_stats(p->get_data());
     Q_EMIT log_this(j_log_action_t::OPEN_PROFILE, p->get_name());
 }
 
 void j_output_display::display_compare_results(QList<compare_result> list)
 {
-    if (list.count() > 0)
+    auto st_data = get_compare_settings_data();
+    if (!st_data->is_checked() || list.isEmpty())
+        return;
+    add_string(enum_to_full_string(j_stats_t::compare), st_data->get_color());
+    foreach (auto res, list)
     {
-        field()->setTextColor(Qt::darkGreen);
-        foreach (auto res, list)
-            field()->append("> " + res.first + ": " + QString::number(res.second * 100, 'g', 3) + '%');
-        field()->setTextColor(Qt::black);
-        field()->append("------------");
+        auto value = res.second;
+        int index = static_cast<int>(compare_res_t_from_value(value));
+        auto item = st_data->child_at(index);
+        if (item->is_checked())
+            add_tab_string(res.first + ": " + QString::number(res.second * 100, 'g', 3) + '%', item->get_color());
     }
+    add_empty_string();
 }

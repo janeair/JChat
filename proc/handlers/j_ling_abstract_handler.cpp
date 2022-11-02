@@ -16,3 +16,14 @@ QString enum_to_string(j_handler_id t)
         return QString();
     }
 }
+
+j_handler_id handler_id_from_int(int n)
+{
+    switch (n)
+    {
+    case 0:
+        return j_handler_id::GWHandler;
+    default:
+        return j_handler_id::NoHandler;
+    }
+}

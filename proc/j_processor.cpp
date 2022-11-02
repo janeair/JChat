@@ -27,6 +27,8 @@ const j_msgs_property_stats &j_processor::stats() const
 
 void j_processor::configure_settings(uint32_t msgs_count, j_handlers handler_types)
 {
+    if (handler_types.testFlag(j_handler_id::NoHandler))
+        return;
     qDebug() << "processor: configure settings" << msgs_count << handler_types;
     assert(msgs_count > 0);
     msgs_to_proc = msgs_count;

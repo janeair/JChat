@@ -76,3 +76,10 @@ settings_item *settings_item::child_at(int row)
         return nullptr;
     return childs.at(row);
 }
+
+const settings_item *settings_item::child_at(int row) const
+{
+    if (row < 0 || row >= childs.size())
+        return nullptr;
+    return childs.at(row);
+}

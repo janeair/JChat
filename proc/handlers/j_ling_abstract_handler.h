@@ -14,6 +14,7 @@ enum class j_handler_id
 };
 
 QString enum_to_string(j_handler_id t);
+j_handler_id handler_id_from_int (int n);
 
 Q_DECLARE_FLAGS(j_handlers, j_handler_id);
 

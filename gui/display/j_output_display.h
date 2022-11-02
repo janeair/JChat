@@ -21,14 +21,13 @@ class j_output_display : public j_abstract_display
 
 public:
     j_output_display(QWidget* parent = nullptr);
-    bool get_general_settings() const;
-    QList<j_property_id> get_property_settings() const;
-    QList<j_compare_res_t> get_compare_settings() const;
+    QPair<bool, QColor> get_general_settings() const;
+    const settings_item* get_property_settings_data() const;
+    const settings_item* get_compare_settings_data() const;
 
 signals:
 
 public slots:
-    void display_lings(QList<j_ling> lings);
     void display_general_stats(const j_msgs_general_stats &stats);
     void display_property_stats(const j_msgs_property_stats &stats);
     void display_profile(const j_profile* p);
