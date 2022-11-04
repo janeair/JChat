@@ -1,8 +1,6 @@
 #ifndef J_MODULE_T_H
 #define J_MODULE_T_H
 
-#include <QFlags>
-
 class QString;
 
 enum class j_module_t

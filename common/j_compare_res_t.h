@@ -4,8 +4,6 @@
 class QString;
 class QColor;
 
-#include <QPair>
-
 enum class j_compare_res_t
 {
     TopMatch,           // >80%

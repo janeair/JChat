@@ -24,9 +24,9 @@ double j_simple_property::correlation(j_abstract_property *another)
     {
         j_simple_property* s_prop = static_cast<j_simple_property*>(another);
         if (is_empty() || s_prop->is_empty())
-            return -1;
+            return 0.;
         else
-            return 1 - ( 2 * abs(value - s_prop->value) / (value + s_prop->value));
+            return 1 - sqrt(abs(value - s_prop->value) / (value + s_prop->value));
     }
     else
         return 0.;
