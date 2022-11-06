@@ -44,6 +44,7 @@ signals:
     void log_this(j_log_action_t t, QString decr);
 
 protected:
+    void add_word(const QString &text, const QColor &color);
     void add_string(const QString &text, const QColor &color);
     void add_tab_string(const QString &text, const QColor &color);
     void add_empty_string();

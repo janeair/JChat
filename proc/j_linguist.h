@@ -34,7 +34,6 @@ private:
     uint32_t msgs_to_proc = 0;
     uint32_t msgs_ready = 0;
     bool is_configured = false;
-    QList<j_ling> ling_list;
     j_msgs_general_stats* ling_stats = nullptr;
 };
 

@@ -16,6 +16,9 @@ public:
     bool get_comp_settings() const;
     const settings_item* get_ling_settings_data() const;
 
+public slots:
+    void rewrite_input_message(QList<j_ling> list);
+
 signals:
     void to_configure(uint32_t msgs);
     void to_analyse(const QString& msg);

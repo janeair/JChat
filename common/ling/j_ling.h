@@ -16,6 +16,7 @@ enum class j_ling_type
 };
 
 const QString enum_to_string(j_ling_type t);
+int enum_to_int(j_ling_type t);
 QColor enum_to_default_color(j_ling_type t);
 j_ling_type ling_type_from_int (int n);
 

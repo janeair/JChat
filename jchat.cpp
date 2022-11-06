@@ -15,7 +15,7 @@ jchat::jchat() : QObject()
 
     /// connect proc stages
     connect(gui.get()->get_input(), &j_input_display::to_analyse, linguist.get(), &j_linguist::process_msg);
-    //connect(linguist.get(), &j_linguist::lings_to_gui, gui.get()->get_output(), &j_output_display::display_lings);
+    connect(linguist.get(), &j_linguist::lings_to_gui, gui.get()->get_input(), &j_input_display::rewrite_input_message);
     connect(linguist.get(), &j_linguist::stats_to_gui, gui.get()->get_output(), &j_output_display::display_general_stats);
     connect(linguist.get(), &j_linguist::to_process, processor.get(), &j_processor::put_to_buffer);
     connect(processor.get(), &j_processor::to_compare, comparator.get(), &j_comparator::compare_stats_with_base);

@@ -76,9 +76,24 @@ const settings_item *j_input_display::get_ling_settings_data() const
     return settings()->get_model()->top_level_item(section);
 }
 
+void j_input_display::rewrite_input_message(QList<j_ling> list)
+{
+    const auto top_item = get_ling_settings_data();
+    foreach (auto ling, list)
+    {
+        int index = enum_to_int(ling.type);
+        const auto item = top_item->child_at(index);
+        if (index >= 0 && item->is_checked())
+            add_word(ling.str, item->get_color());
+    }
+    add_word(" ->", top_item->child_at(enum_to_int(j_ling_type::Separator))->get_color());
+    add_empty_string();
+}
+
 void j_input_display::process_input()
 {
     QStringList msg_list = field()->toPlainText().split('\n', Qt::SkipEmptyParts);
+    clear_field();
     if (msg_list.count() > 0)
     {
         Q_EMIT to_configure(msg_list.size());

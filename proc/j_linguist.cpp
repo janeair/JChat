@@ -94,8 +94,6 @@ void j_linguist::process_msg(QString text)
     }
 
     /// output stats configure
-    ling_list.append(lings_out);
-
     uint lings_cc = lings_out.size();
     j_msgs_general_stats gen_stats;
     for (QList<j_ling>::const_iterator i = lings_out.cbegin();
@@ -111,12 +109,12 @@ void j_linguist::process_msg(QString text)
     msgs_ready++;
     if (!is_busy())
     {
-        Q_EMIT lings_to_gui(ling_list);
         Q_EMIT stats_to_gui(std::move(*ling_stats));
         clear();
     }
 
-    Q_EMIT to_process(std::move(lings_out));
+    Q_EMIT lings_to_gui(lings_out);
+    Q_EMIT to_process(lings_out);
 }
 
 bool j_linguist::is_busy() const
@@ -130,7 +128,6 @@ void j_linguist::clear()
     msgs_to_proc = 0;
     msgs_ready = 0;
     is_configured = false;
-    ling_list.clear();
     ling_stats->clear();
 }
 

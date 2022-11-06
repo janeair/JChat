@@ -146,6 +146,13 @@ void j_abstract_display::import_to_field()
     Q_EMIT log_this(j_log_action_t::IMPORT_DATA, "<" + windowTitle().toLower() + ">");
 }
 
+void j_abstract_display::add_word(const QString &text, const QColor &color)
+{
+    auto _color = color.isValid() ? color : Qt::black;
+    field()->setTextColor(_color);
+    field()->insertPlainText(text);
+}
+
 void j_abstract_display::add_string(const QString &text, const QColor &color)
 {
     auto _color = color.isValid() ? color : Qt::black;

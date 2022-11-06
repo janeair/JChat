@@ -97,3 +97,24 @@ j_ling_type ling_type_from_int(int n)
         return j_ling_type::None;
     }
 }
+
+int enum_to_int(j_ling_type t)
+{
+    switch (t)
+    {
+    case j_ling_type::Word:
+        return 0;
+    case j_ling_type::Symbol:
+        return 1;
+    case j_ling_type::Sign:
+        return 2;
+    case j_ling_type::Number:
+        return 3;
+    case j_ling_type::Separator:
+        return 4;
+    case j_ling_type::ND:
+        return 5;
+    default:
+        return -1;
+    }
+}
