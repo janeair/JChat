@@ -68,7 +68,6 @@ public:
     j_profile_editor(QWidget* parent = nullptr);
     ~j_profile_editor() = default;
     j_profile_editor_table_model* get_data_model() { return table_model; }
-    void set_profile_base(j_profile_base* base);
 
 public slots:
     void delete_selected_profile();
@@ -78,6 +77,7 @@ public slots:
 
     void set_current_stats(j_msgs_property_stats stats);
     void clear_current_stats();
+    void set_profile_base(j_profile_base* base);
 
 protected slots:
     void closeEvent(QCloseEvent* event);

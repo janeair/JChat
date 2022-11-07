@@ -1,4 +1,4 @@
-#include "import/settings_widget.h"
+#include "import/tree_settings_widget.h"
 
 #include <QTreeView>
 #include <QColorDialog>
@@ -15,18 +15,18 @@ tree_settings::settings_tree_model::~settings_tree_model()
 
 int tree_settings::settings_tree_model::rowCount(const QModelIndex &parent) const
 {
-    settings_item *parent_it;
+    tree_settings_item *parent_it;
     if (parent.column() > 0)
         return 0;
 
-    parent_it = (!parent.isValid()) ? root : static_cast<settings_item*>(parent.internalPointer());
+    parent_it = (!parent.isValid()) ? root : static_cast<tree_settings_item*>(parent.internalPointer());
     return parent_it->child_count();
 }
 
 int tree_settings::settings_tree_model::columnCount(const QModelIndex &parent) const
 {
     if (!parent.isValid())
-        return static_cast<settings_item*>(parent.internalPointer())->column_count();
+        return static_cast<tree_settings_item*>(parent.internalPointer())->column_count();
     return root->column_count();
 }
 
@@ -35,8 +35,8 @@ QModelIndex tree_settings::settings_tree_model::parent(const QModelIndex &index)
     if (!index.isValid())
         return QModelIndex();
 
-    settings_item *child_it = static_cast<settings_item*>(index.internalPointer());
-    settings_item *parent_it = child_it->get_parent();
+    tree_settings_item *child_it = static_cast<tree_settings_item*>(index.internalPointer());
+    tree_settings_item *parent_it = child_it->get_parent();
 
     if (parent_it == root)
         return QModelIndex();
@@ -49,9 +49,9 @@ QModelIndex tree_settings::settings_tree_model::index(int row, int column, const
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    settings_item *parent_it = (!parent.isValid()) ? root : static_cast<settings_item*>(parent.internalPointer());
+    tree_settings_item *parent_it = (!parent.isValid()) ? root : static_cast<tree_settings_item*>(parent.internalPointer());
 
-    settings_item *child_it = parent_it->child_at(row);
+    tree_settings_item *child_it = parent_it->child_at(row);
     if (child_it)
         return createIndex(row, column, child_it);
     return QModelIndex();
@@ -64,23 +64,23 @@ QVariant tree_settings::settings_tree_model::data(const QModelIndex &index, int 
     {
     case Qt::DisplayRole:
     {
-        value = static_cast<settings_item*>(index.internalPointer())->name();
+        value = static_cast<tree_settings_item*>(index.internalPointer())->name();
     }
     break;
     case Qt::CheckStateRole:
     {
-        value = static_cast<settings_item*>(index.internalPointer())->checkstate();
+        value = static_cast<tree_settings_item*>(index.internalPointer())->checkstate();
     }
     break;
     case Qt::ForegroundRole:
     {
-        settings_item* item = static_cast<settings_item*>(index.internalPointer());
+        tree_settings_item* item = static_cast<tree_settings_item*>(index.internalPointer());
         value = (item->has_color()) ? item->get_color() : Qt::black;
     }
     break;
     case Qt::ToolTipRole:
     {
-        settings_item* item = static_cast<settings_item*>(index.internalPointer());
+        tree_settings_item* item = static_cast<tree_settings_item*>(index.internalPointer());
         if (item->has_color())
             value = "Change highlight color on double click";
     }
@@ -94,7 +94,7 @@ bool tree_settings::settings_tree_model::setData(const QModelIndex &index, const
         return false;
     if (role != Qt::CheckStateRole)
         return false;
-    settings_item* item = static_cast<settings_item*>(index.internalPointer());
+    tree_settings_item* item = static_cast<tree_settings_item*>(index.internalPointer());
     item->set_checkstate(value.toBool());
     Q_EMIT dataChanged(index, index);
     if (item->get_parent())
@@ -117,7 +117,7 @@ QVariant tree_settings::settings_tree_model::headerData(int section, Qt::Orienta
     return QVariant();
 }
 
-const settings_item *tree_settings::settings_tree_model::top_level_item(int index) const
+const tree_settings_item *tree_settings::settings_tree_model::top_level_item(int index) const
 {
     return root->child_at(index);
 }
@@ -126,7 +126,7 @@ void tree_settings::settings_tree_model::change_highlight_color(const QModelInde
 {
     if (!index.isValid())
         return;
-    settings_item* item = static_cast<settings_item*>(index.internalPointer());
+    tree_settings_item* item = static_cast<tree_settings_item*>(index.internalPointer());
     if (!item->has_color())
         return;
     if (!parent_widget)
@@ -141,7 +141,7 @@ void tree_settings::settings_tree_model::change_highlight_color(const QModelInde
 
 ///###############################################################
 
-tree_settings::settings_widget::settings_widget(settings_tree_model *_model, QWidget *parent) : QDockWidget(parent)
+tree_settings::tree_settings_widget::tree_settings_widget(settings_tree_model *_model, QWidget *parent) : QDockWidget(parent)
 {
     tree = new QTreeView(this);
     model = _model;

@@ -22,8 +22,8 @@ class j_output_display : public j_abstract_display
 public:
     j_output_display(QWidget* parent = nullptr);
     QPair<bool, QColor> get_general_settings() const;
-    const settings_item* get_property_settings_data() const;
-    const settings_item* get_compare_settings_data() const;
+    const tree_settings_item* get_property_settings_data() const;
+    const tree_settings_item* get_compare_settings_data() const;
 
 signals:
 

@@ -1,6 +1,6 @@
-#include "import/settings_item.h"
+#include "import/tree_settings_item.h"
 
-settings_item::settings_item(settings_item *_parent, const QString &name, QColor _color, bool default_checked)
+tree_settings_item::tree_settings_item(tree_settings_item *_parent, const QString &name, QColor _color, bool default_checked)
 {
     parent = _parent;
     title = name;
@@ -8,35 +8,35 @@ settings_item::settings_item(settings_item *_parent, const QString &name, QColor
     color = _color;
 }
 
-settings_item::~settings_item()
+tree_settings_item::~tree_settings_item()
 {
     for (auto child : childs)
         delete(child);
 }
 
-void settings_item::add_child(settings_item *_child)
+void tree_settings_item::add_child(tree_settings_item *_child)
 {
     childs.append(_child);
 }
 
-int settings_item::child_count() const
+int tree_settings_item::child_count() const
 {
     return childs.size();
 }
 
-int settings_item::column_count() const
+int tree_settings_item::column_count() const
 {
     return 1;
 }
 
-int settings_item::row() const
+int tree_settings_item::row() const
 {
     if (parent)
-        return parent->childs.indexOf(const_cast<settings_item*>(this));
+        return parent->childs.indexOf(const_cast<tree_settings_item*>(this));
     return 0;
 }
 
-void settings_item::set_checkstate(bool _state)
+void tree_settings_item::set_checkstate(bool _state)
 {
     state = (_state) ? Qt::Checked : Qt::Unchecked;
     for (auto child : childs)
@@ -45,12 +45,12 @@ void settings_item::set_checkstate(bool _state)
         parent->update_checkstate();
 }
 
-void settings_item::set_color(const QColor &_color)
+void tree_settings_item::set_color(const QColor &_color)
 {
     color = _color;
 }
 
-void settings_item::update_checkstate() const
+void tree_settings_item::update_checkstate() const
 {
     if (childs.size() == 0)
         return;
@@ -70,14 +70,14 @@ void settings_item::update_checkstate() const
     }
 }
 
-settings_item *settings_item::child_at(int row)
+tree_settings_item *tree_settings_item::child_at(int row)
 {
     if (row < 0 || row >= childs.size())
         return nullptr;
     return childs.at(row);
 }
 
-const settings_item *settings_item::child_at(int row) const
+const tree_settings_item *tree_settings_item::child_at(int row) const
 {
     if (row < 0 || row >= childs.size())
         return nullptr;

@@ -14,7 +14,7 @@ public:
     j_ling_types get_ling_settings() const;
     j_handlers get_proc_settings() const;
     bool get_comp_settings() const;
-    const settings_item* get_ling_settings_data() const;
+    const tree_settings_item* get_ling_settings_data() const;
 
 public slots:
     void rewrite_input_message(QList<j_ling> list);

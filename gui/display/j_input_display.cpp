@@ -13,8 +13,8 @@ j_input_display::j_input_display(QWidget* parent)
           )
 {
     /// configure toolbar
-    toolbar()->add_action<settings_widget>
-            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &settings_widget::setVisible);
+    toolbar()->add_action<tree_settings_widget>
+            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &tree_settings_widget::setVisible);
     toolbar()->add_action<j_input_display>
             (icon(j_toolbar_action_t::A_IMPORT), "Import from text file", this, &j_input_display::import_to_field);
     toolbar()->add_action<j_input_display, j_input_display>
@@ -70,7 +70,7 @@ bool j_input_display::get_comp_settings() const
     return is_checked;
 }
 
-const settings_item *j_input_display::get_ling_settings_data() const
+const tree_settings_item *j_input_display::get_ling_settings_data() const
 {
     int section = static_cast<int>(j_module_t::Linguist);
     return settings()->get_model()->top_level_item(section);

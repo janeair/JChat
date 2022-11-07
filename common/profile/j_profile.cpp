@@ -176,6 +176,7 @@ bool j_profile_base::rename_profile(j_profile *p, const QString &new_name)
         name_to_profile.remove(p->get_name());
         name_to_profile.insert(new_name, p_base);
     }
+    Q_EMIT profile_name_changed();
     return true;
 }
 
@@ -191,6 +192,7 @@ bool j_profile_base::rename_profile(const QString &name, const QString &new_name
         name_to_profile.remove(name);
         name_to_profile.insert(new_name, p);
     }
+    Q_EMIT profile_name_changed();
     return true;
 }
 

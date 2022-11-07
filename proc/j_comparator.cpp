@@ -5,9 +5,13 @@
 
 #include <QDebug>
 
-j_comparator::j_comparator(QObject *parent) : QObject(parent) {}
-
-j_comparator::j_comparator(j_profile_base *p_base, QObject *parent) : QObject(parent), base(p_base) {}
+j_comparator::j_comparator(QObject *parent) : QObject(parent)
+{
+    prop_weights = std::make_unique<single_weight_data>();
+    int count = static_cast<int>(j_property_id::COUNT);
+    for (int i = 0; i < count; i++)
+        prop_weights->set_data(enum_to_string(static_cast<j_property_id>(i)), 1);
+}
 
 void j_comparator::compare_stats_with_base(j_msgs_property_stats stats)
 {
@@ -48,7 +52,6 @@ double j_comparator::compare_stats(const j_msgs_property_stats &first, const j_m
     double res = 0.;
     int res_value = 0;
     /// value for each property in future
-    const int value = 1;
     auto list1 = first.list();
     auto list2 = second.list();
     foreach (auto prop, list1)
@@ -57,6 +60,7 @@ double j_comparator::compare_stats(const j_msgs_property_stats &first, const j_m
                                   [prop](j_abstract_property* i) { return (prop->id_enum() == i->id_enum()); });
         if (match != list2.cend())
         {
+            auto value = prop_weights->get_data(enum_to_string(prop->id_enum()));
             res += value * prop->correlation(*match);
             res_value += value;
         }

@@ -1,7 +1,7 @@
 #ifndef J_ABSTRACT_DISPLAY_H
 #define J_ABSTRACT_DISPLAY_H
 
-#include "import/settings_widget.h"
+#include "import/tree_settings_widget.h"
 #include <QDockWidget>
 
 using namespace tree_settings;
@@ -28,8 +28,8 @@ public:
 
     const action_toolbar* toolbar() const { return tb; }
     action_toolbar* toolbar() { return tb; }
-    const settings_widget* settings() const { return stngs; }
-    settings_widget* settings() { return stngs; }
+    const tree_settings_widget* settings() const { return stngs; }
+    tree_settings_widget* settings() { return stngs; }
     const QTextEdit* field() const { return fld; }
     QTextEdit* field() { return fld; }
 
@@ -51,7 +51,7 @@ protected:
 
 private:
     action_toolbar *tb = nullptr;
-    settings_widget *stngs = nullptr;
+    tree_settings_widget *stngs = nullptr;
     QTextEdit *fld = nullptr;
 };
 

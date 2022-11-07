@@ -71,6 +71,7 @@ public:
 
 signals:
     void profile_count_changed(int count);
+    void profile_name_changed();
 
 private:
     std::vector<j_profile*> profiles;

@@ -18,6 +18,7 @@ public slots:
     void save_profiles();
 
 signals:
+    void send_base(j_profile_base* base);
 
 private:
     std::unique_ptr<j_profile_base> base;

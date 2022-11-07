@@ -1,7 +1,7 @@
-#ifndef SETTINGS_WIDGET_H
-#define SETTINGS_WIDGET_H
+#ifndef tree_settings_widget_H
+#define tree_settings_widget_H
 
-#include "import/settings_item.h"
+#include "import/tree_settings_item.h"
 
 #include <QDockWidget>
 #include <QAbstractItemModel>
@@ -31,27 +31,27 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    const settings_item* top_level_item(int index) const;
+    const tree_settings_item* top_level_item(int index) const;
 
 protected:
-    settings_item* get_root() { return root; }
-    void create_root(settings_item* item) { root = item; }
+    tree_settings_item* get_root() { return root; }
+    void create_root(tree_settings_item* item) { root = item; }
 
 public slots:
     void change_highlight_color(const QModelIndex& index);
 
 private:
-    settings_item* root = nullptr;
+    tree_settings_item* root = nullptr;
     QWidget* parent_widget = nullptr;
 };
 
 // creates tree widget with model/view structure
 // supports change item' highlight color via creating color dialog on double click
 
-class settings_widget : public QDockWidget
+class tree_settings_widget : public QDockWidget
 {
 public:
-    settings_widget(settings_tree_model* _model, QWidget* parent = nullptr);
+    tree_settings_widget(settings_tree_model* _model, QWidget* parent = nullptr);
     const settings_tree_model* get_model() const { return model; }
 
 private:
@@ -62,4 +62,4 @@ private:
 
 }
 
-#endif // SETTINGS_WIDGET_H
+#endif // tree_settings_widget_H

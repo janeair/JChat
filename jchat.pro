@@ -25,11 +25,12 @@ SOURCES += \
     gui/jchat_gui.cpp \
     gui/log/j_log_action.cpp \
     gui/log/jchat_log.cpp \
+    gui/subwindow/j_compare_analyzer_widget.cpp \
     gui/subwindow/j_profile_editor.cpp \
     gui/subwindow/text_file_io_dialog.cpp \
     import/color_dialog_button.cpp \
-    import/settings_item.cpp \
-    import/settings_widget.cpp \
+    import/tree_settings_item.cpp \
+    import/tree_settings_widget.cpp \
     load/j_profile_loader.cpp \
     main.cpp \
     jchat.cpp \
@@ -57,12 +58,14 @@ HEADERS += \
     gui/jchat_gui.h \
     gui/log/j_log_action.h \
     gui/log/jchat_log.h \
+    gui/subwindow/j_compare_analyzer_widget.h \
     gui/subwindow/j_profile_editor.h \
     gui/subwindow/text_file_io_dialog.h \
     import/action_toolbar.h \
     import/color_dialog_button.h \
-    import/settings_item.h \
-    import/settings_widget.h \
+    import/single_weight_data.h \
+    import/tree_settings_item.h \
+    import/tree_settings_widget.h \
     jchat.h \
     load/j_profile_loader.h \
     proc/handlers/j_general_word_handler.h \
