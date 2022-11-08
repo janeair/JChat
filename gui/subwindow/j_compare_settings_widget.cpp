@@ -77,23 +77,30 @@ QVariant j_compare_settings_model::headerData(int section, Qt::Orientation orien
     {
         if (orientation == Qt::Horizontal && section < static_cast<int>(j_compare_settings_column_t::COUNT))
              value = enum_to_string(static_cast<j_compare_settings_column_t>(section));
-        else if (orientation == Qt::Vertical)
-             value = QString::number(section + 1);
     }
     return value;
 }
 
 bool j_compare_settings_model::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-
+    if (role == Qt::EditRole)
+    {
+        auto title = enum_to_string(static_cast<j_property_id>(index.row()));
+        bool res;
+        int data = value.toInt(&res);
+        if (res)
+            res = settings_data->set_data(title, data);
+        return res;
+    }
+    return false;
 }
 
 Qt::ItemFlags j_compare_settings_model::flags(const QModelIndex &index) const
 {
     switch (index.column())
     {
-    case static_cast<int>(j_compare_settings_column_t::title):
-        return Qt::ItemIsEditable | Qt::ItemIsEnabled;
+    case static_cast<int>(j_compare_settings_column_t::weight):
+        return Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     default:
         return Qt::ItemIsEnabled;
     }

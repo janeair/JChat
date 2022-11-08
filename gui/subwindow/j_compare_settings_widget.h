@@ -48,7 +48,7 @@ private:
 
     const int title_w = 120;
     const int weight_w = 50;
-    const int border_w = 30;
+    const int border_w = 15;
     const int row_h = 20;
 };
 

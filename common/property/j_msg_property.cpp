@@ -5,9 +5,9 @@ const QString enum_to_string(j_property_id id)
     switch (id)
     {
     case j_property_id::WORDS_IN_MESSAGE:
-        return QString("Words in Message");
+        return QString("words in message");
     case j_property_id::SYMBOLS_IN_WORD:
-        return QString("Symbols in Word");
+        return QString("symbols in word");
     default:
         return QString();
     }
