@@ -54,7 +54,7 @@ QVariant j_profile_editor_table_model::data(const QModelIndex &index, int role) 
     QVariant value;
     if (!base)
         return value;
-    switch(role)
+    switch (role)
     {
         case Qt::DisplayRole:
         {
@@ -287,7 +287,7 @@ j_profile_editor::j_profile_editor(QWidget* parent) : QMainWindow(parent)
     QWidget* central_scene = new QWidget();
     central_scene->setLayout(layout);
     setCentralWidget(central_scene);
-    addToolBar(Qt::LeftToolBarArea, toolbar);
+    addToolBar(Qt::TopToolBarArea, toolbar);
     setWindowTitle("Profile Editor");
 }
 
@@ -331,7 +331,7 @@ void j_profile_editor::save_to_selected_profile()
         table_model->add_data(p_name, current_stats);
         current_profile->clear();
         clear_current_stats();
-        profile_table->setRowHeight(table_model->rowCount(QModelIndex()) - 1, 25);
+        profile_table->setRowHeight(table_model->rowCount(QModelIndex()) - 1, row_h);
     }
 }
 

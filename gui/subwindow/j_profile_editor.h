@@ -101,6 +101,7 @@ private:
     QColor in_base_color = Qt::black;
     QColor out_base_color = Qt::red;
     const int max_profile_name_size = 12;
+    const int row_h = 20;
 
     void set_selected_profile_color(const QString &text);
 

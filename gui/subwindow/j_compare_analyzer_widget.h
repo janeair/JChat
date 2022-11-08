@@ -8,6 +8,7 @@ class j_profile_base;
 class action_toolbar;
 class j_comparator;
 class color_dialog_button;
+class j_compare_settings_widget;
 
 class j_profile_combobox : public QComboBox
 {
@@ -31,7 +32,7 @@ class j_compare_analyzer_widget : public QMainWindow
 
 public:
     explicit j_compare_analyzer_widget(QWidget *parent = nullptr);
-    void set_comparator(j_comparator* comp) { comparator = comp; }
+    void set_comparator(j_comparator* comp);
 
 public slots:
     void set_profile_base(j_profile_base* data);
@@ -46,6 +47,7 @@ private:
     action_toolbar* toolbar = nullptr;
     j_profile_combobox* first_p = nullptr;
     j_profile_combobox* second_p = nullptr;
+    j_compare_settings_widget* settings = nullptr;
     color_dialog_button* chart_color_btn = nullptr;
 
     j_comparator* comparator = nullptr;

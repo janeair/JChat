@@ -26,6 +26,7 @@ SOURCES += \
     gui/log/j_log_action.cpp \
     gui/log/jchat_log.cpp \
     gui/subwindow/j_compare_analyzer_widget.cpp \
+    gui/subwindow/j_compare_settings_widget.cpp \
     gui/subwindow/j_profile_editor.cpp \
     gui/subwindow/text_file_io_dialog.cpp \
     import/color_dialog_button.cpp \
@@ -59,6 +60,7 @@ HEADERS += \
     gui/log/j_log_action.h \
     gui/log/jchat_log.h \
     gui/subwindow/j_compare_analyzer_widget.h \
+    gui/subwindow/j_compare_settings_widget.h \
     gui/subwindow/j_profile_editor.h \
     gui/subwindow/text_file_io_dialog.h \
     import/action_toolbar.h \

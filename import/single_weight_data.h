@@ -22,13 +22,25 @@ public:
         data.insert(key, value);
         return true;
     }
-    double get_data(const QString &key) const
+    double get_double(const QString &key) const
     {
         int value = data.value(key, default_value);
         if (value == default_value)
             return default_value;
         else
             return static_cast<double>(value) / weigth_sum;
+    }
+    int get_int(const QString &key) const
+    {
+        int value = data.value(key, default_value);
+        if (value == default_value)
+            return default_value;
+        else
+            return value;
+    }
+    int count() const
+    {
+        return data.count();
     }
     void set_bounds(uint _min, uint _max)
     {

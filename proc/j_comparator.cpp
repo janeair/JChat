@@ -60,7 +60,7 @@ double j_comparator::compare_stats(const j_msgs_property_stats &first, const j_m
                                   [prop](j_abstract_property* i) { return (prop->id_enum() == i->id_enum()); });
         if (match != list2.cend())
         {
-            auto value = prop_weights->get_data(enum_to_string(prop->id_enum()));
+            auto value = prop_weights->get_double(enum_to_string(prop->id_enum()));
             res += value * prop->correlation(*match);
             res_value += value;
         }

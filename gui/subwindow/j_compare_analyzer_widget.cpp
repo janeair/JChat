@@ -3,6 +3,8 @@
 #include "common/profile/j_profile.h"
 #include "gui/common/j_action_toolbar.h"
 #include "import/color_dialog_button.h"
+#include "gui/subwindow/j_compare_settings_widget.h"
+#include "proc/j_comparator.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -53,10 +55,14 @@ j_compare_analyzer_widget::j_compare_analyzer_widget(QWidget *parent) : QMainWin
     toolbar = new action_toolbar("Actions", this);
     first_p = new j_profile_combobox(this);
     second_p = new j_profile_combobox(this);
+    settings = new j_compare_settings_widget();
     chart_color_btn = new color_dialog_button(QColor(), this);
 
+    toolbar->setFloatable(false);
     toolbar->add_action<j_compare_analyzer_widget, j_compare_analyzer_widget>
             (icon(j_toolbar_action_t::A_SELECT), "Compare profiles", this, &j_compare_analyzer_widget::add_chart, this, &j_compare_analyzer_widget::chart_can_be_added, false);
+    toolbar->add_action<j_compare_settings_widget>
+            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings, &j_compare_settings_widget::setVisible);
     toolbar->add_action<j_compare_analyzer_widget>
             (icon(j_toolbar_action_t::A_DELETE), "Clear charts", this, &j_compare_analyzer_widget::clear_charts);
 
@@ -87,8 +93,18 @@ j_compare_analyzer_widget::j_compare_analyzer_widget(QWidget *parent) : QMainWin
     QWidget* central_scene = new QWidget();
     central_scene->setLayout(main_group);
     setCentralWidget(central_scene);
-    addToolBar(Qt::LeftToolBarArea, toolbar);
+    addToolBar(Qt::TopToolBarArea, toolbar);
+    addDockWidget(Qt::LeftDockWidgetArea, settings);
+    settings->setVisible(false);
     setWindowTitle("Compare Analyzer");
+}
+
+void j_compare_analyzer_widget::set_comparator(j_comparator *comp)
+{
+    if (!comp)
+        return;
+    comparator = comp;
+    settings->set_data(comparator->get_weights());
 }
 
 void j_compare_analyzer_widget::set_profile_base(j_profile_base *data)
