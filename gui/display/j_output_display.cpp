@@ -15,8 +15,8 @@ j_output_display::j_output_display(QWidget* parent)
           )
 {
     /// configure toolbar
-    toolbar()->add_action<tree_settings_widget>
-            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &tree_settings_widget::setVisible);
+    toolbar()->add_action<tree_settings_checkable_widget>
+            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &tree_settings_checkable_widget::setVisible);
     toolbar()->add_action<j_output_display, j_output_display>
             (icon(j_toolbar_action_t::A_EXPORT), "Export to text file", this, &j_output_display::export_from_field, this, &j_output_display::field_text_changed, false);
     toolbar()->add_action<QTextEdit, j_output_display>
@@ -35,13 +35,13 @@ QPair<bool, QColor> j_output_display::get_general_settings() const
     return QPair<bool, QColor>(item->is_checked(), item->get_color());
 }
 
-const tree_settings_item* j_output_display::get_property_settings_data() const
+const tree_checkable_settings_item* j_output_display::get_property_settings_data() const
 {
     int section = static_cast<int>(j_stats_t::property);
     return settings()->get_model()->top_level_item(section);
 }
 
-const tree_settings_item* j_output_display::get_compare_settings_data() const
+const tree_checkable_settings_item* j_output_display::get_compare_settings_data() const
 {
     int section = static_cast<int>(j_stats_t::compare);
     return settings()->get_model()->top_level_item(section);

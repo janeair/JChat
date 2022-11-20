@@ -1,20 +1,22 @@
-#ifndef tree_settings_item_H
-#define tree_settings_item_H
+#ifndef tree_checkable_settings_item_H
+#define tree_checkable_settings_item_H
 
 #include <QColor>
 
-class tree_settings_item
+/// checkable string settings item with optional color
+
+class tree_checkable_settings_item
 {
 public:
-    explicit tree_settings_item(tree_settings_item *_parent, const QString &name, QColor _color = QColor(), bool default_checked = false);
-    ~tree_settings_item();
+    explicit tree_checkable_settings_item(tree_checkable_settings_item *_parent, const QString &name, QColor _color = QColor(), bool default_checked = false);
+    ~tree_checkable_settings_item();
 
-    void add_child(tree_settings_item *_child);
+    void add_child(tree_checkable_settings_item *_child);
 
-    tree_settings_item *child_at(int row);
-    const tree_settings_item *child_at(int row) const;
-    tree_settings_item *get_parent() { return parent; };
-    const QList<tree_settings_item*> get_childs() const { return childs; }
+    tree_checkable_settings_item *child_at(int row);
+    const tree_checkable_settings_item *child_at(int row) const;
+    tree_checkable_settings_item *get_parent() { return parent; };
+    const QList<tree_checkable_settings_item*> get_childs() const { return childs; }
     int child_count() const;
     int column_count() const;
     int row() const;
@@ -30,11 +32,11 @@ public:
     bool has_color() const { return color.isValid(); }
 
 private:
-    tree_settings_item* parent = nullptr;
-    QList<tree_settings_item*> childs;
+    tree_checkable_settings_item* parent = nullptr;
+    QList<tree_checkable_settings_item*> childs;
     mutable Qt::CheckState state = Qt::Unchecked;
     QString title;
     QColor color;
 };
 
-#endif // tree_settings_item_H
+#endif // tree_checkable_settings_item_H

@@ -17,21 +17,21 @@
 #include <QMainWindow>
 #include <QTextEdit>
 
-j_settings_model::j_settings_model(j_display_type t, QWidget *parent)
-    : settings_tree_model(parent)
+j_display_settings_model::j_display_settings_model(j_display_type t, QWidget *parent)
+    : tree_settings_checkable_model(parent)
 {
-    tree_settings_item* root;
+    tree_checkable_settings_item* root;
     switch (t)
     {
     case j_display_type::input:
     {
-        root = new tree_settings_item(nullptr, "Modules");
+        root = new tree_checkable_settings_item(nullptr, "Modules");
         auto count = static_cast<int>(j_module_t::COUNT);
         for (int i = 0; i < count; i++)
         {
             j_module_t type = static_cast<j_module_t>(i);
             QString name = enum_to_string(type);
-            tree_settings_item* top_item = new tree_settings_item(root, name);
+            tree_checkable_settings_item* top_item = new tree_checkable_settings_item(root, name);
             switch (type)
             {
             case j_module_t::Linguist:
@@ -41,7 +41,7 @@ j_settings_model::j_settings_model(j_display_type t, QWidget *parent)
                     {
                         j_ling_type type = static_cast<j_ling_type>(i);
                         QString name = enum_to_string(type);
-                        tree_settings_item* item = new tree_settings_item(top_item, name, enum_to_default_color(type));
+                        tree_checkable_settings_item* item = new tree_checkable_settings_item(top_item, name, enum_to_default_color(type));
                         top_item->add_child(item);
                     }
                 }
@@ -53,7 +53,7 @@ j_settings_model::j_settings_model(j_display_type t, QWidget *parent)
                     {
                         j_handler_id type = static_cast<j_handler_id>(i);
                         QString name = enum_to_string(type);
-                        tree_settings_item* item = new tree_settings_item(top_item, name);
+                        tree_checkable_settings_item* item = new tree_checkable_settings_item(top_item, name);
                         top_item->add_child(item);
                     }
                 }
@@ -67,13 +67,13 @@ j_settings_model::j_settings_model(j_display_type t, QWidget *parent)
     break;
     case j_display_type::output:
     {
-        root = new tree_settings_item(nullptr, "Stats");
+        root = new tree_checkable_settings_item(nullptr, "Stats");
         auto count = static_cast<int>(j_stats_t::COUNT);
         for (int i = 0; i < count; i++)
         {
             j_stats_t type = static_cast<j_stats_t>(i);
             QString name = enum_to_string(type);
-            tree_settings_item* top_item = new tree_settings_item(root, name, enum_to_default_color(type));
+            tree_checkable_settings_item* top_item = new tree_checkable_settings_item(root, name, enum_to_default_color(type));
             switch (type)
             {
             case j_stats_t::property:
@@ -83,7 +83,7 @@ j_settings_model::j_settings_model(j_display_type t, QWidget *parent)
                 {
                     j_property_id type = static_cast<j_property_id>(i);
                     QString name = enum_to_string(type);
-                    tree_settings_item* item = new tree_settings_item(top_item, name);
+                    tree_checkable_settings_item* item = new tree_checkable_settings_item(top_item, name);
                     top_item->add_child(item);
                 }
             }
@@ -95,7 +95,7 @@ j_settings_model::j_settings_model(j_display_type t, QWidget *parent)
                 {
                     j_compare_res_t type = static_cast<j_compare_res_t>(i);
                     QString name = enum_to_string(type);
-                    tree_settings_item* item = new tree_settings_item(top_item, name, enum_to_default_color(type));
+                    tree_checkable_settings_item* item = new tree_checkable_settings_item(top_item, name, enum_to_default_color(type));
                     top_item->add_child(item);
                 }
             }
@@ -115,18 +115,16 @@ j_abstract_display::j_abstract_display(j_display_type t, QWidget *parent)
     : QDockWidget(parent)
 {
     tb = new action_toolbar("Actions", this);
-    j_settings_model *model = new j_settings_model(t, this);
-    stngs = new tree_settings_widget(model);
+    j_display_settings_model *model = new j_display_settings_model(t, this);
+    stngs = new tree_settings_checkable_widget(model);
     fld = new QTextEdit(this);
     connect(fld, &QTextEdit::textChanged, [this] () { Q_EMIT field_text_changed(fld->toPlainText().length() > 0); });
-    QDockWidget* field = new QDockWidget("Field");
-    field->setWidget(fld);
 
     QMainWindow* w = new QMainWindow();
     w->addToolBar(tb);
     w->addDockWidget(Qt::LeftDockWidgetArea, stngs);
     stngs->setVisible(false);
-    w->addDockWidget(Qt::RightDockWidgetArea, field);
+    w->setCentralWidget(fld);
     setWidget(w);
 
     setWindowTitle(enum_to_string(t));
