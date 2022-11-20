@@ -32,8 +32,8 @@ signals:
 public slots:
     void configure(uint32_t msgs);
     void export_from_log();
-    void show_editor();
-    void show_analyzer();
+    void show_editor(bool show);
+    void show_analyzer(bool show);
 
 private:
     j_input_display* input = nullptr;

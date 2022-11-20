@@ -13,12 +13,12 @@ j_input_display::j_input_display(QWidget* parent)
           )
 {
     /// configure toolbar
+    toolbar()->add_action<j_input_display, j_input_display>
+            (icon(j_toolbar_action_t::A_SELECT), "Process text", this, &j_input_display::process_input, this, &j_input_display::field_text_changed, false);
     toolbar()->add_action<tree_settings_checkable_widget>
             (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &tree_settings_checkable_widget::setVisible);
     toolbar()->add_action<j_input_display>
             (icon(j_toolbar_action_t::A_IMPORT), "Import from text file", this, &j_input_display::import_to_field);
-    toolbar()->add_action<j_input_display, j_input_display>
-            (icon(j_toolbar_action_t::A_SELECT), "Process text", this, &j_input_display::process_input, this, &j_input_display::field_text_changed, false);
     toolbar()->add_action<QTextEdit, j_input_display>
             (icon(j_toolbar_action_t::A_DELETE), "Clear field", field(), &QTextEdit::clear, this, &j_input_display::field_text_changed, false);
 

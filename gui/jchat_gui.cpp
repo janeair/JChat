@@ -62,14 +62,22 @@ void jchat_gui::export_from_log()
         log->log_message(j_log_action_t::EXPORT_DATA, log->windowTitle().toLower());
 }
 
-void jchat_gui::show_editor()
+void jchat_gui::show_editor(bool show)
 {
-    if (editor && editor->isHidden())
+    if (!editor)
+        return;
+    if (show)
         editor->show();
+    else
+        editor->hide();
 }
 
-void jchat_gui::show_analyzer()
+void jchat_gui::show_analyzer(bool show)
 {
-    if (analyzer && analyzer->isHidden())
+    if (!analyzer)
+        return;
+    if (show)
         analyzer->show();
+    else
+        analyzer->hide();
 }

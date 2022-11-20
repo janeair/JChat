@@ -212,11 +212,11 @@ j_profile_editor::j_profile_editor(QWidget* parent) : QMainWindow(parent)
     toolbar->add_action<j_profile_editor, j_profile_editor>
             (icon(j_toolbar_action_t::A_OPEN), "Open selected profile",
              this, &j_profile_editor::open_selected_profile, this, &j_profile_editor::selected_profile_changed, false);
-    toolbar->add_action<j_profile_editor>
-            (icon(j_toolbar_action_t::A_EDIT), "Edit profiles", this, &j_profile_editor::set_edit_profile_names);
     toolbar->add_action<j_profile_editor, j_profile_editor>
             (icon(j_toolbar_action_t::A_DELETE), "Delete selected profile",
              this, &j_profile_editor::delete_selected_profile, this, &j_profile_editor::selected_profile_changed, false);
+    toolbar->add_action<j_profile_editor>
+            (icon(j_toolbar_action_t::A_EDIT), "Edit profiles", this, &j_profile_editor::set_edit_profile_names);
 
     current_profile = new QLineEdit(this);
     current_profile->setPlaceholderText("new profile");
