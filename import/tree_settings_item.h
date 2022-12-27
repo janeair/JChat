@@ -1,14 +1,18 @@
-#ifndef tree_checkable_settings_item_H
-#define tree_checkable_settings_item_H
+#ifndef TREE_SETTINGS_ITEM_H
+#define TREE_SETTINGS_ITEM_H
 
 #include <QColor>
+#include <QHash>
 
 /// checkable string settings item with optional color
 
 class tree_checkable_settings_item
 {
 public:
-    explicit tree_checkable_settings_item(tree_checkable_settings_item *_parent, const QString &name, QColor _color = QColor(), bool default_checked = false);
+    explicit tree_checkable_settings_item(tree_checkable_settings_item *_parent,
+                                          const QString &name,
+                                          QColor _color = QColor(),
+                                          bool default_checked = false);
     ~tree_checkable_settings_item();
 
     void add_child(tree_checkable_settings_item *_child);
@@ -39,4 +43,20 @@ private:
     QColor color;
 };
 
-#endif // tree_checkable_settings_item_H
+class tree_checkable_settings_data
+{
+public:
+    explicit tree_checkable_settings_data(tree_checkable_settings_item *item);
+    ~tree_checkable_settings_data() { delete root; };
+    const tree_checkable_settings_item* item(const QString& key) const;
+    const tree_checkable_settings_item* head() const { return root; }
+    tree_checkable_settings_item* head() { return root; }
+
+private:
+    tree_checkable_settings_item* root;
+    QHash<QString, tree_checkable_settings_item*> list;
+
+    void add_to_list (tree_checkable_settings_item* item);
+};
+
+#endif // TREE_SETTINGS_ITEM_H

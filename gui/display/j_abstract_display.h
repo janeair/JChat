@@ -12,12 +12,6 @@ class QTextEdit;
 enum class j_log_action_t;
 enum class j_display_type;
 
-class j_display_settings_model : public tree_settings_checkable_model
-{
-public:
-    j_display_settings_model(j_display_type t, QWidget* parent = nullptr);
-};
-
 class j_abstract_display : public QDockWidget
 {
     Q_OBJECT
@@ -28,12 +22,15 @@ public:
 
     const action_toolbar* toolbar() const { return tb; }
     action_toolbar* toolbar() { return tb; }
-    const tree_settings_checkable_widget* settings() const { return stngs; }
-    tree_settings_checkable_widget* settings() { return stngs; }
+    const tree_checkable_settings_widget* settings() const { return stngs; }
+    tree_checkable_settings_widget* settings() { return stngs; }
     const QTextEdit* field() const { return fld; }
     QTextEdit* field() { return fld; }
 
     void clear_field();
+
+private:
+    tree_checkable_settings_data* create_settings(j_display_type t);
 
 public slots:
     void export_from_field();
@@ -51,7 +48,7 @@ protected:
 
 private:
     action_toolbar *tb = nullptr;
-    tree_settings_checkable_widget *stngs = nullptr;
+    tree_checkable_settings_widget *stngs = nullptr;
     QTextEdit *fld = nullptr;
 };
 

@@ -83,3 +83,23 @@ const tree_checkable_settings_item *tree_checkable_settings_item::child_at(int r
         return nullptr;
     return childs.at(row);
 }
+
+///###############################################################
+
+tree_checkable_settings_data::tree_checkable_settings_data(tree_checkable_settings_item *item)
+{
+    root = std::move(item);
+    add_to_list(root);
+}
+
+const tree_checkable_settings_item *tree_checkable_settings_data::item(const QString &key) const
+{
+    return list.value(key, nullptr);
+}
+
+void tree_checkable_settings_data::add_to_list(tree_checkable_settings_item *item)
+{
+    foreach (auto child, item->get_childs())
+        add_to_list(child);
+    list.insert(item->name(), item);
+}

@@ -15,8 +15,8 @@ j_input_display::j_input_display(QWidget* parent)
     /// configure toolbar
     toolbar()->add_action<j_input_display, j_input_display>
             (icon(j_toolbar_action_t::A_SELECT), "Process text", this, &j_input_display::process_input, this, &j_input_display::field_text_changed, false);
-    toolbar()->add_action<tree_settings_checkable_widget>
-            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &tree_settings_checkable_widget::setVisible);
+    toolbar()->add_action<tree_checkable_settings_widget>
+            (icon(j_toolbar_action_t::A_SETTINGS), "Show/hide settings", settings(), &tree_checkable_settings_widget::setVisible);
     toolbar()->add_action<j_input_display>
             (icon(j_toolbar_action_t::A_IMPORT), "Import from text file", this, &j_input_display::import_to_field);
     toolbar()->add_action<QTextEdit, j_input_display>
@@ -29,13 +29,11 @@ j_input_display::j_input_display(QWidget* parent)
 j_ling_types j_input_display::get_ling_settings() const
 {
     j_ling_types res = j_ling_type::None;
-    int section = static_cast<int>(j_module_t::Linguist);
-    const auto model = settings()->get_model();
-    const auto top_item = model->top_level_item(section);
-    bool is_checked = top_item->is_checked();
+    const auto setting = settings()->get_setting(enum_to_string(j_module_t::Linguist));
+    bool is_checked = setting->is_checked();
     if (!is_checked)
         return res;
-    auto list = top_item->get_childs();
+    auto list = setting->get_childs();
     foreach (auto item, list)
         if (item->is_checked())
             res |= ling_type_from_int(item->row());
@@ -45,14 +43,12 @@ j_ling_types j_input_display::get_ling_settings() const
 j_handlers j_input_display::get_proc_settings() const
 {
     j_handlers res = j_handler_id::NoHandler;
-    int section = static_cast<int>(j_module_t::Processor);
-    const auto model = settings()->get_model();
-    const auto top_item = model->top_level_item(section);
-    bool is_checked = top_item->is_checked()
-            && model->top_level_item(static_cast<int>(j_module_t::Linguist))->is_checked();
+    const auto setting = settings()->get_setting(enum_to_string(j_module_t::Processor));
+    bool is_checked = setting->is_checked()
+            && settings()->get_setting(enum_to_string(j_module_t::Linguist))->is_checked();
     if (!is_checked)
         return res;
-    auto list = top_item->get_childs();
+    auto list = setting->get_childs();
     foreach (auto item, list)
         if (item->is_checked())
             res |= handler_id_from_int(item->row());
@@ -61,19 +57,16 @@ j_handlers j_input_display::get_proc_settings() const
 
 bool j_input_display::get_comp_settings() const
 {
-    int section = static_cast<int>(j_module_t::Comparator);
-    const auto model = settings()->get_model();
-    const auto top_item = model->top_level_item(section);
-    bool is_checked = top_item->is_checked()
-            && model->top_level_item(static_cast<int>(j_module_t::Linguist))->is_checked()
-            && model->top_level_item(static_cast<int>(j_module_t::Processor))->is_checked();
+    const auto setting = settings()->get_setting(enum_to_string(j_module_t::Comparator));
+    bool is_checked = setting->is_checked()
+            && settings()->get_setting(enum_to_string(j_module_t::Linguist))->is_checked()
+            && settings()->get_setting(enum_to_string(j_module_t::Processor))->is_checked();
     return is_checked;
 }
 
 const tree_checkable_settings_item *j_input_display::get_ling_settings_data() const
 {
-    int section = static_cast<int>(j_module_t::Linguist);
-    return settings()->get_model()->top_level_item(section);
+    return settings()->get_setting(enum_to_string(j_module_t::Linguist));
 }
 
 void j_input_display::rewrite_input_message(QList<j_ling> list)

@@ -32,11 +32,7 @@ public:
     }
     int get_int(const QString &key) const
     {
-        int value = data.value(key, default_value);
-        if (value == default_value)
-            return default_value;
-        else
-            return value;
+        return data.value(key, default_value);
     }
     int count() const
     {

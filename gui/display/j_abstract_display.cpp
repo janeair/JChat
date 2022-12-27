@@ -17,13 +17,34 @@
 #include <QMainWindow>
 #include <QTextEdit>
 
-j_display_settings_model::j_display_settings_model(j_display_type t, QWidget *parent)
-    : tree_settings_checkable_model(parent)
+j_abstract_display::j_abstract_display(j_display_type t, QWidget *parent)
+    : QDockWidget(parent)
 {
-    tree_checkable_settings_item* root;
-    switch (t)
-    {
-    case j_display_type::input:
+    tb = new action_toolbar("Actions", this);
+    auto stngs_data = create_settings(t);
+    stngs = new tree_checkable_settings_widget(stngs_data, this);
+    fld = new QTextEdit(this);
+    connect(fld, &QTextEdit::textChanged, [this] () { Q_EMIT field_text_changed(fld->toPlainText().length() > 0); });
+
+    QMainWindow* w = new QMainWindow();
+    w->addToolBar(tb);
+    w->addDockWidget(Qt::LeftDockWidgetArea, stngs);
+    stngs->setVisible(false);
+    w->setCentralWidget(fld);
+    setWidget(w);
+
+    setWindowTitle(enum_to_string(t));
+}
+
+void j_abstract_display::clear_field()
+{
+    fld->clear();
+}
+
+tree_checkable_settings_data *j_abstract_display::create_settings(j_display_type t)
+{
+    tree_checkable_settings_item* root = nullptr;
+    if (t == j_display_type::input)
     {
         root = new tree_checkable_settings_item(nullptr, "Modules");
         auto count = static_cast<int>(j_module_t::COUNT);
@@ -64,8 +85,7 @@ j_display_settings_model::j_display_settings_model(j_display_type t, QWidget *pa
             root->add_child(top_item);
         }
     }
-    break;
-    case j_display_type::output:
+    else
     {
         root = new tree_checkable_settings_item(nullptr, "Stats");
         auto count = static_cast<int>(j_stats_t::COUNT);
@@ -77,62 +97,37 @@ j_display_settings_model::j_display_settings_model(j_display_type t, QWidget *pa
             switch (type)
             {
             case j_stats_t::property:
-            {
-                auto count = static_cast<int>(j_property_id::COUNT);
-                for (int i = 0; i < count; i++)
                 {
-                    j_property_id type = static_cast<j_property_id>(i);
-                    QString name = enum_to_string(type);
-                    tree_checkable_settings_item* item = new tree_checkable_settings_item(top_item, name);
-                    top_item->add_child(item);
+                    auto count = static_cast<int>(j_property_id::COUNT);
+                    for (int i = 0; i < count; i++)
+                    {
+                        j_property_id type = static_cast<j_property_id>(i);
+                        QString name = enum_to_string(type);
+                        tree_checkable_settings_item* item = new tree_checkable_settings_item(top_item, name);
+                        top_item->add_child(item);
+                    }
                 }
-            }
-            break;
+                break;
             case j_stats_t::compare:
-            {
-                auto count = static_cast<int>(j_compare_res_t::COUNT);
-                for (int i = 0; i < count; i++)
                 {
-                    j_compare_res_t type = static_cast<j_compare_res_t>(i);
-                    QString name = enum_to_string(type);
-                    tree_checkable_settings_item* item = new tree_checkable_settings_item(top_item, name, enum_to_default_color(type));
-                    top_item->add_child(item);
+                    auto count = static_cast<int>(j_compare_res_t::COUNT);
+                    for (int i = 0; i < count; i++)
+                    {
+                        j_compare_res_t type = static_cast<j_compare_res_t>(i);
+                        QString name = enum_to_string(type);
+                        tree_checkable_settings_item* item = new tree_checkable_settings_item(top_item, name, enum_to_default_color(type));
+                        top_item->add_child(item);
+                    }
                 }
-            }
-            break;
+                break;
             default:
-            break;
+                break;
             }
             root->add_child(top_item);
         }
     }
-    break;
-    }
-    create_root(root);
-}
 
-j_abstract_display::j_abstract_display(j_display_type t, QWidget *parent)
-    : QDockWidget(parent)
-{
-    tb = new action_toolbar("Actions", this);
-    j_display_settings_model *model = new j_display_settings_model(t, this);
-    stngs = new tree_settings_checkable_widget(model);
-    fld = new QTextEdit(this);
-    connect(fld, &QTextEdit::textChanged, [this] () { Q_EMIT field_text_changed(fld->toPlainText().length() > 0); });
-
-    QMainWindow* w = new QMainWindow();
-    w->addToolBar(tb);
-    w->addDockWidget(Qt::LeftDockWidgetArea, stngs);
-    stngs->setVisible(false);
-    w->setCentralWidget(fld);
-    setWidget(w);
-
-    setWindowTitle(enum_to_string(t));
-}
-
-void j_abstract_display::clear_field()
-{
-    fld->clear();
+    return new tree_checkable_settings_data (root);
 }
 
 void j_abstract_display::import_to_field()
